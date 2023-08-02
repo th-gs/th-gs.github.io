@@ -1,0 +1,1323 @@
+<!DOCTYPE HTML>
+<html lang="">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="请求响应和分层解耦（四）, ljs&#39;s blog">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>请求响应和分层解耦（四） | ljs&#39;s blog</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery.min.js"></script>
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+
+<canvas class="fireworks" style="position: fixed;left: 0;top: 0;z-index: 1; pointer-events: none;" ></canvas> 
+<script type="text/javascript" src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script> 
+<script type="text/javascript" src="/js/fireworks.js"></script>
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/loading.gif" data-original="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">ljs&#39;s blog</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>档案室</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于我</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言板</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="Search" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/loading.gif" data-original="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">ljs&#39;s blog</div>
+        <div class="logo-desc">
+            
+            Never really desperate, only the lost of the soul.
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			档案室
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于我
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言板
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/th-gs/th-gs.github.io" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/th-gs/th-gs.github.io" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/7.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">请求响应和分层解耦（四）</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        padding: 35px 0 15px 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        padding-bottom: 30px;
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/JavaWeb/">
+                                <span class="chip bg-color">JavaWeb</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/notes/" class="post-category">
+                                notes
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
+                    2023-05-10
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
+                    3.2k
+                </div>
+                
+
+                
+
+                
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="far fa-eye fa-fw"></i>Read Count:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h1 id="请求响应和分层解耦（四）"><a href="#请求响应和分层解耦（四）" class="headerlink" title="请求响应和分层解耦（四）"></a>请求响应和分层解耦（四）</h1><h2 id="请求"><a href="#请求" class="headerlink" title="请求"></a>请求</h2><h3 id="简单参数"><a href="#简单参数" class="headerlink" title="简单参数"></a>简单参数</h3><ol>
+<li>原始方式获取请求参数</li>
+<li>SpringBoot中接收简单参数</li>
+<li>@RequestParam注解</li>
+</ol>
+<h4 id="原始方式"><a href="#原始方式" class="headerlink" title="原始方式"></a>原始方式</h4><p>Controller方法形参中声明HttpServletRequest对象，调用对象的getParameter(参数名)  </p>
+<p><strong>范例</strong>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;项目内位置src&#x2F;main&#x2F;java&#x2F;com.ljsblog&#x2F;controller&#x2F;RequestController.java</span><br><span class="line">package com.ljsblog.controller;</span><br><span class="line"></span><br><span class="line">import org.springframework.web.bind.annotation.RequestMapping;</span><br><span class="line">import org.springframework.web.bind.annotation.RequestParam;</span><br><span class="line">import org.springframework.web.bind.annotation.RestController;</span><br><span class="line"></span><br><span class="line">import javax.servlet.http.HttpServletRequest;</span><br><span class="line"></span><br><span class="line">@RestController</span><br><span class="line">public class RequestController &#123;</span><br><span class="line">    @RequestMapping(&quot;&#x2F;test&quot;)</span><br><span class="line">    public String test(HttpServletRequest request)&#123;</span><br><span class="line">        String name&#x3D;request.getParameter(&quot;name&quot;);</span><br><span class="line">        String pass&#x3D;request.getParameter(&quot;pass&quot;);</span><br><span class="line">        System.out.println(name+&quot;:&quot;+pass);</span><br><span class="line">        return &quot;ok&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="Springboot方式"><a href="#Springboot方式" class="headerlink" title="Springboot方式"></a>Springboot方式</h4><p>请求参数名与方法形参变量名相同，会自动进行类型转换。  </p>
+<p><strong>范例：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;项目内位置src&#x2F;main&#x2F;java&#x2F;com.ljsblog&#x2F;controller&#x2F;RequestController.java</span><br><span class="line">package com.ljsblog.controller;</span><br><span class="line"></span><br><span class="line">import org.springframework.web.bind.annotation.RequestMapping;</span><br><span class="line">import org.springframework.web.bind.annotation.RequestParam;</span><br><span class="line">import org.springframework.web.bind.annotation.RestController;</span><br><span class="line"></span><br><span class="line">import javax.servlet.http.HttpServletRequest;</span><br><span class="line"></span><br><span class="line">@RestController</span><br><span class="line">public class RequestController &#123;</span><br><span class="line">    @RequestMapping(&quot;&#x2F;test&quot;)</span><br><span class="line">    public String test(String name,Integer pass)&#123;</span><br><span class="line">        System.out.println(name+&quot;:&quot;+pass);</span><br><span class="line">        return &quot;ok&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="RequestParam注解"><a href="#RequestParam注解" class="headerlink" title="@RequestParam注解"></a>@RequestParam注解</h4><p>方法形参名称与请求参数名称不匹配，通过该注解完成映射，该注解的require属性值默认是true，代表请求参数必须传递。  </p>
+<p><strong>范例：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">package com.ljsblog.controller;</span><br><span class="line"></span><br><span class="line">import org.springframework.web.bind.annotation.RequestMapping;</span><br><span class="line">import org.springframework.web.bind.annotation.RequestParam;</span><br><span class="line">import org.springframework.web.bind.annotation.RestController;</span><br><span class="line"></span><br><span class="line">import javax.servlet.http.HttpServletRequest;</span><br><span class="line"></span><br><span class="line">@RestController</span><br><span class="line">public class RequestController &#123;</span><br><span class="line">	&#x2F;&#x2F;postman里设置的参数名为username,password</span><br><span class="line">    @RequestMapping(&quot;&#x2F;test&quot;)</span><br><span class="line">    public String test(@RequestParam(name &#x3D; &quot;username&quot;) String name, @RequestParam(name&#x3D;&quot;password&quot;) Integer pass)&#123;</span><br><span class="line">        System.out.println(name+&quot;:&quot;+pass);</span><br><span class="line">        return &quot;ok&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="实体参数"><a href="#实体参数" class="headerlink" title="实体参数"></a>实体参数</h3><h4 id="简单实体对象"><a href="#简单实体对象" class="headerlink" title="简单实体对象"></a>简单实体对象</h4><p><strong>简单实体对象</strong>：请求参数名与形参对象属性名相同，定义POJO接收即可。  </p>
+<p><strong>范例</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;User.java</span><br><span class="line">package com.ljsblog.pojo;</span><br><span class="line"></span><br><span class="line">public class User &#123;</span><br><span class="line">    private String name;</span><br><span class="line">    private Integer age;</span><br><span class="line"></span><br><span class="line">    public String getName() &#123;</span><br><span class="line">        return name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setName(String name) &#123;</span><br><span class="line">        this.name &#x3D; name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public Integer getAge() &#123;</span><br><span class="line">        return age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setAge(Integer age) &#123;</span><br><span class="line">        this.age &#x3D; age;</span><br><span class="line">    &#125;</span><br><span class="line">    @Override</span><br><span class="line">    public String toString() &#123;</span><br><span class="line">        return &quot;User&#123;&quot; +</span><br><span class="line">                &quot;name&#x3D;&#39;&quot; + name + &#39;\&#39;&#39; +</span><br><span class="line">                &quot;, age&#x3D;&quot; + age +</span><br><span class="line">                &#39;&#125;&#39;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F;RequestController.java</span><br><span class="line">package com.ljsblog.controller;</span><br><span class="line"></span><br><span class="line">import com.ljsblog.pojo.User;</span><br><span class="line">import org.springframework.web.bind.annotation.RequestMapping;</span><br><span class="line">import org.springframework.web.bind.annotation.RestController;</span><br><span class="line"></span><br><span class="line">@RestController</span><br><span class="line">public class RequestController &#123;</span><br><span class="line">    @RequestMapping(&quot;&#x2F;pojotest&quot;)</span><br><span class="line">    public String test(User user)&#123;</span><br><span class="line">        System.out.println(user);</span><br><span class="line">        return &quot;ok&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F;postman里的数据为</span><br><span class="line">&#x2F;&#x2F;name</span><br><span class="line">&#x2F;&#x2F;age</span><br></pre></td></tr></table></figure>
+<h4 id="复杂实体对象"><a href="#复杂实体对象" class="headerlink" title="复杂实体对象"></a>复杂实体对象</h4><p><strong>复杂实体对象</strong>：请求参数名与形参对象属性名相同，按照对象层次结构关系即可接收嵌套POJO属性参数。  </p>
+<p><strong>范例</strong>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;User.java</span><br><span class="line">package com.ljsblog.pojo;</span><br><span class="line"></span><br><span class="line">public class User &#123;</span><br><span class="line">    private String name;</span><br><span class="line">    private Integer age;</span><br><span class="line">    private Address address;</span><br><span class="line"></span><br><span class="line">    public String getName() &#123;</span><br><span class="line">        return name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setName(String name) &#123;</span><br><span class="line">        this.name &#x3D; name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public Integer getAge() &#123;</span><br><span class="line">        return age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setAge(Integer age) &#123;</span><br><span class="line">        this.age &#x3D; age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public Address getAddress() &#123;</span><br><span class="line">        return address;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setAddress(Address address) &#123;</span><br><span class="line">        this.address &#x3D; address;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public String toString() &#123;</span><br><span class="line">        return &quot;User&#123;&quot; +</span><br><span class="line">                &quot;name&#x3D;&#39;&quot; + name + &#39;\&#39;&#39; +</span><br><span class="line">                &quot;, age&#x3D;&quot; + age +</span><br><span class="line">                &quot;, address&#x3D;&quot; + address +</span><br><span class="line">                &#39;&#125;&#39;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F;Address.java</span><br><span class="line">package com.ljsblog.pojo;</span><br><span class="line"></span><br><span class="line">public class Address &#123;</span><br><span class="line">    private String province;</span><br><span class="line">    private String city;</span><br><span class="line"></span><br><span class="line">    public String getProvince() &#123;</span><br><span class="line">        return province;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setProvince(String province) &#123;</span><br><span class="line">        this.province &#x3D; province;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getCity() &#123;</span><br><span class="line">        return city;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setCity(String city) &#123;</span><br><span class="line">        this.city &#x3D; city;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public String toString() &#123;</span><br><span class="line">        return &quot;Address&#123;&quot; +</span><br><span class="line">                &quot;province&#x3D;&#39;&quot; + province + &#39;\&#39;&#39; +</span><br><span class="line">                &quot;, city&#x3D;&#39;&quot; + city + &#39;\&#39;&#39; +</span><br><span class="line">                &#39;&#125;&#39;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F;RequestController.java</span><br><span class="line">package com.ljsblog.controller;</span><br><span class="line"></span><br><span class="line">import com.ljsblog.pojo.User;</span><br><span class="line">import org.springframework.web.bind.annotation.RequestMapping;</span><br><span class="line">import org.springframework.web.bind.annotation.RestController;</span><br><span class="line"></span><br><span class="line">@RestController</span><br><span class="line">public class RequestController &#123;</span><br><span class="line">    @RequestMapping(&quot;&#x2F;pojotest&quot;)</span><br><span class="line">    public String test(User user)&#123;</span><br><span class="line">        System.out.println(user);</span><br><span class="line">        return &quot;ok&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F;postman里的数据为</span><br><span class="line">&#x2F;&#x2F;name</span><br><span class="line">&#x2F;&#x2F;age</span><br><span class="line">&#x2F;&#x2F;address.province</span><br><span class="line">&#x2F;&#x2F;address.city</span><br></pre></td></tr></table></figure>
+<h3 id="数组参数"><a href="#数组参数" class="headerlink" title="数组参数"></a>数组参数</h3><p><strong>数组参数</strong>：请求参数名与形参数组名称相同且请求参数为多个，定义数组类型形参可接收参数。  </p>
+<p><strong>范例</strong>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">package com.ljsblog.controller;</span><br><span class="line">import org.springframework.web.bind.annotation.RequestMapping;</span><br><span class="line">import org.springframework.web.bind.annotation.RequestParam;</span><br><span class="line">import org.springframework.web.bind.annotation.RestController;</span><br><span class="line"></span><br><span class="line">import java.util.ArrayList;</span><br><span class="line">import java.util.Arrays;</span><br><span class="line"></span><br><span class="line">@RestController</span><br><span class="line">public class RequestController &#123;</span><br><span class="line">    @RequestMapping(&quot;&#x2F;arrTest&quot;)</span><br><span class="line">    public String arrTest(String[] arr)&#123;</span><br><span class="line">        System.out.println(Arrays.toString(arr));</span><br><span class="line">        return &quot;ok&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F;postman参数</span><br><span class="line">&#x2F;&#x2F;arr</span><br><span class="line">&#x2F;&#x2F;arr</span><br><span class="line">&#x2F;&#x2F;arr</span><br></pre></td></tr></table></figure>
+<h3 id="集合参数"><a href="#集合参数" class="headerlink" title="集合参数"></a>集合参数</h3><p><strong>集合参数</strong>：请求参数名与形参集合名称相同且请求参数为多个，@RequestParam绑定参数关系，若不用该注解，数据默认封装到数组。  </p>
+<p><strong>范例</strong>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">package com.ljsblog.controller;</span><br><span class="line">import org.springframework.web.bind.annotation.RequestMapping;</span><br><span class="line">import org.springframework.web.bind.annotation.RequestParam;</span><br><span class="line">import org.springframework.web.bind.annotation.RestController;</span><br><span class="line"></span><br><span class="line">import java.util.ArrayList;</span><br><span class="line">import java.util.Arrays;</span><br><span class="line"></span><br><span class="line">@RestController</span><br><span class="line">public class RequestController &#123;</span><br><span class="line">    @RequestMapping(&quot;&#x2F;listTest&quot;)</span><br><span class="line">    public String listTest(@RequestParam ArrayList&lt;String&gt; list)&#123;</span><br><span class="line">        System.out.println(list);</span><br><span class="line">        return &quot;ok&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F;postman参数</span><br><span class="line">&#x2F;&#x2F;list</span><br><span class="line">&#x2F;&#x2F;list</span><br><span class="line">&#x2F;&#x2F;list</span><br></pre></td></tr></table></figure>
+<h3 id="日期参数"><a href="#日期参数" class="headerlink" title="日期参数"></a>日期参数</h3><p>使用@DateTimeFormat注解完成日期参数格式转换。  </p>
+<p><strong>范例</strong>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@RequestMapping(&quot;&#x2F;datetimeTest&quot;)</span><br><span class="line">public String dateTimeTest(@DateTimeFormat(pattern &#x3D; &quot;yyyy-MM-dd HH:mm:ss&quot;)LocalDateTime dateTime)&#123;</span><br><span class="line">	System.out.println(dateTime);</span><br><span class="line">    return &quot;ok&quot;;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F;postman参数</span><br><span class="line">&#x2F;&#x2F;dateTime  2019-11-30 12:06:54</span><br></pre></td></tr></table></figure>
+<h3 id="JSON参数"><a href="#JSON参数" class="headerlink" title="JSON参数"></a>JSON参数</h3><p>JSON数据键名与形参对象属性名相同，定义POJO类型形参即可接收参数，需使用@RequestBody标识。  </p>
+<p><strong>范例</strong>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">@RequestMapping(&quot;&#x2F;jsonTest&quot;)</span><br><span class="line">public String jsonTest(@RequestBody User user)&#123;</span><br><span class="line">    System.out.println(user);</span><br><span class="line">    return &quot;ok&quot;;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F;postman参数</span><br><span class="line">&#x2F;&#x2F;选择post方式，因为Json存放在存储体中</span><br><span class="line">&#x2F;&#x2F;数据类型选择postman</span><br><span class="line">&#x2F;*</span><br><span class="line">&#123;</span><br><span class="line">    &quot;name&quot;:&quot;zhangsan&quot;,</span><br><span class="line">    &quot;age&quot;:18,</span><br><span class="line">    &quot;address&quot;:&#123;</span><br><span class="line">        &quot;province&quot;:&quot;河北&quot;,</span><br><span class="line">        &quot;city&quot;:&quot;廊坊&quot;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">*&#x2F;</span><br></pre></td></tr></table></figure>
+<h3 id="路径参数"><a href="#路径参数" class="headerlink" title="路径参数"></a>路径参数</h3><p>通过请求URL直接传递参数，使用{…}来标识该路径参数，需使用@PathVariable获取路径参数。  </p>
+<p><strong>范例</strong>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">@RequestMapping(&quot;&#x2F;pathTest&#x2F;&#123;id&#125;&quot;)</span><br><span class="line">public String pathTest(@PathVariable Integer id)&#123;</span><br><span class="line">    System.out.println(id);</span><br><span class="line">    return &quot;ok&quot;;</span><br><span class="line">&#125;</span><br><span class="line">@RequestMapping(&quot;&#x2F;pathTest&#x2F;&#123;id&#125;&#x2F;&#123;name&#125;&quot;)</span><br><span class="line">public String pathTest(@PathVariable Integer id,@PathVariable String name)&#123;</span><br><span class="line">    System.out.println(id+&quot;：&quot;+name);</span><br><span class="line">    return &quot;ok&quot;;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F;postman的url</span><br><span class="line">&#x2F;&#x2F;单http:&#x2F;&#x2F;localhost:8080&#x2F;pathTest&#x2F;5</span><br><span class="line">&#x2F;&#x2F;多http:&#x2F;&#x2F;localhost:8080&#x2F;pathTest&#x2F;3&#x2F;zhangsan</span><br></pre></td></tr></table></figure>
+<h2 id="响应"><a href="#响应" class="headerlink" title="响应"></a>响应</h2><h3 id="Responsebody"><a href="#Responsebody" class="headerlink" title="@Responsebody"></a>@Responsebody</h3><p><strong>类型</strong>：方法注解，类注解  </p>
+<p><strong>位置</strong>：Controller方法/类上  </p>
+<p><strong>作用</strong>：将方法返回值直接响应，若返回值类型是实体对象/集合，将会转换成JSON格式响应。  </p>
+<p><strong>说明</strong>：@RestController=@Controller+@ResponseBody  </p>
+<h3 id="统一响应结果"><a href="#统一响应结果" class="headerlink" title="统一响应结果"></a>统一响应结果</h3><p>Result(code,msg,data)  </p>
+<h2 id="分层耦合"><a href="#分层耦合" class="headerlink" title="分层耦合"></a>分层耦合</h2><h3 id="三层架构"><a href="#三层架构" class="headerlink" title="三层架构"></a>三层架构</h3><ul>
+<li>controller：控制层，接收前端发送的请求，对请求进行处理，并响应数据</li>
+<li>service：业务逻辑层，处理具体的业务逻辑</li>
+<li>dao：数据访问层（Data Access Object）（持久层），负责数据的访问操作，包括数据的增删改查</li>
+</ul>
+<p><strong>范例</strong>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;controller</span><br><span class="line">&#x2F;&#x2F;EmpController</span><br><span class="line">package com.ljsblog.controller;</span><br><span class="line">import com.ljsblog.pojo.Emp;</span><br><span class="line">import com.ljsblog.pojo.Result;</span><br><span class="line">import com.ljsblog.service.EmpService;</span><br><span class="line">import com.ljsblog.service.impl.EmpServiceA;</span><br><span class="line">import org.springframework.web.bind.annotation.RequestMapping;</span><br><span class="line">import org.springframework.web.bind.annotation.RestController;</span><br><span class="line">import java.util.List;</span><br><span class="line">@RestController</span><br><span class="line">public class EmpController &#123;</span><br><span class="line">    private EmpService empService&#x3D;new EmpServiceA();</span><br><span class="line">    @RequestMapping(&quot;&#x2F;listEmp&quot;)</span><br><span class="line">    public Result list()&#123;</span><br><span class="line">        List&lt;Emp&gt; empList&#x3D;empService.empList();</span><br><span class="line">        return Result.success(empList);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;service</span><br><span class="line">package com.ljsblog.service.impl;</span><br><span class="line">import com.ljsblog.dao.EmpDao;</span><br><span class="line">import com.ljsblog.dao.impl.EmpDaoA;</span><br><span class="line">import com.ljsblog.pojo.Emp;</span><br><span class="line">import com.ljsblog.service.EmpService;</span><br><span class="line">import java.util.List;</span><br><span class="line">public class EmpServiceA implements EmpService &#123;</span><br><span class="line">    private EmpDao empDao&#x3D;new EmpDaoA();</span><br><span class="line">    @Override</span><br><span class="line">    public List&lt;Emp&gt; empList() &#123;</span><br><span class="line">        List&lt;Emp&gt; empList&#x3D;empDao.listEmp();</span><br><span class="line">        empList.stream().forEach(emp -&gt; &#123;</span><br><span class="line">            String gender&#x3D;emp.getGender();</span><br><span class="line">            if(gender.equals(&quot;1&quot;))&#123;</span><br><span class="line">                emp.setGender(&quot;男&quot;);</span><br><span class="line">            &#125;else &#123;</span><br><span class="line">                emp.setGender(&quot;女&quot;);</span><br><span class="line">            &#125;</span><br><span class="line">            String job&#x3D;emp.getJob();</span><br><span class="line">            if(job.equals(&quot;1&quot;))&#123;</span><br><span class="line">                emp.setJob(&quot;讲师&quot;);</span><br><span class="line">            &#125;else if(job.equals(&quot;2&quot;))&#123;</span><br><span class="line">                emp.setJob(&quot;班主任&quot;);</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                emp.setJob(&quot;就业指导&quot;);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        return empList;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">package com.ljsblog.service;</span><br><span class="line">import com.ljsblog.pojo.Emp;</span><br><span class="line">import java.util.List;</span><br><span class="line">public interface EmpService &#123;</span><br><span class="line">    public List&lt;Emp&gt; empList();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;dao</span><br><span class="line">package com.ljsblog.dao.impl;</span><br><span class="line">import com.ljsblog.dao.EmpDao;</span><br><span class="line">import com.ljsblog.pojo.Emp;</span><br><span class="line">import com.ljsblog.utils.XmlParserUtils;</span><br><span class="line"></span><br><span class="line">import java.util.List;</span><br><span class="line">public class EmpDaoA implements EmpDao &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public List&lt;Emp&gt; listEmp() &#123;</span><br><span class="line">        String file&#x3D;this.getClass().getClassLoader().getResource(&quot;emp.xml&quot;).getFile();</span><br><span class="line">        System.out.println(file);</span><br><span class="line">        List&lt;Emp&gt; empList&#x3D; XmlParserUtils.parse(file,Emp.class);</span><br><span class="line">        return empList;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">package com.ljsblog.dao;</span><br><span class="line">import com.ljsblog.pojo.Emp;</span><br><span class="line">import java.util.List;</span><br><span class="line">public interface EmpDao &#123;</span><br><span class="line">    public List&lt;Emp&gt; listEmp();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="分层解耦"><a href="#分层解耦" class="headerlink" title="分层解耦"></a>分层解耦</h3><p><strong>内聚</strong>：软件各个功能模块内部的功能联系。  </p>
+<p><strong>耦合</strong>：衡量软件中各个层/模块之间的依赖，关联的程度。  </p>
+<p><strong>软件设计原则</strong>：高内聚低耦合。  </p>
+<p><strong>控制反转</strong>：Inversion Of Control，简称IOC，对象的创建控制权由程序自身转移到外部（容器），这种思想成为控制反转。  </p>
+<p><strong>依赖注入</strong>：Dependency Injection，简称DI，容器为应用程序提供运行时所依赖的资源，称之为依赖注入。  </p>
+<p><strong>Bean对象</strong>：IOC容器中创建，管理的对象，称之为bean。  </p>
+<p><strong>范例</strong>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;controller</span><br><span class="line">package com.ljsblog.controller;</span><br><span class="line">import com.ljsblog.pojo.Emp;</span><br><span class="line">import com.ljsblog.pojo.Result;</span><br><span class="line">import com.ljsblog.service.EmpService;</span><br><span class="line">import org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line">import org.springframework.web.bind.annotation.RequestMapping;</span><br><span class="line">import org.springframework.web.bind.annotation.RestController;</span><br><span class="line">import java.util.List;</span><br><span class="line">@RestController</span><br><span class="line">public class EmpController &#123;</span><br><span class="line">    @Autowired</span><br><span class="line">    private EmpService empService;</span><br><span class="line">    @RequestMapping(&quot;&#x2F;listEmp&quot;)</span><br><span class="line">    public Result list()&#123;</span><br><span class="line">        List&lt;Emp&gt; empList&#x3D;empService.empList();</span><br><span class="line">        return Result.success(empList);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;dao</span><br><span class="line">package com.ljsblog.dao.impl;</span><br><span class="line">import com.ljsblog.dao.EmpDao;</span><br><span class="line">import com.ljsblog.pojo.Emp;</span><br><span class="line">import com.ljsblog.utils.XmlParserUtils;</span><br><span class="line">import org.springframework.stereotype.Component;</span><br><span class="line"></span><br><span class="line">import java.util.List;</span><br><span class="line">@Component</span><br><span class="line">public class EmpDaoA implements EmpDao &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public List&lt;Emp&gt; listEmp() &#123;</span><br><span class="line">        String file&#x3D;this.getClass().getClassLoader().getResource(&quot;emp.xml&quot;).getFile();</span><br><span class="line">        System.out.println(file);</span><br><span class="line">        List&lt;Emp&gt; empList&#x3D; XmlParserUtils.parse(file,Emp.class);</span><br><span class="line">        return empList;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">package com.ljsblog.dao;</span><br><span class="line">import com.ljsblog.pojo.Emp;</span><br><span class="line">import java.util.List;</span><br><span class="line">public interface EmpDao &#123;</span><br><span class="line">    public List&lt;Emp&gt; listEmp();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;service</span><br><span class="line">package com.ljsblog.service.impl;</span><br><span class="line">import com.ljsblog.dao.EmpDao;</span><br><span class="line">import com.ljsblog.pojo.Emp;</span><br><span class="line">import com.ljsblog.service.EmpService;</span><br><span class="line">import org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line">import org.springframework.stereotype.Component;</span><br><span class="line"></span><br><span class="line">import java.util.List;</span><br><span class="line">@Component</span><br><span class="line">public class EmpServiceA implements EmpService &#123;</span><br><span class="line">    @Autowired&#x2F;&#x2F;依赖注入</span><br><span class="line">    private EmpDao empDao;</span><br><span class="line">    @Override</span><br><span class="line">    public List&lt;Emp&gt; empList() &#123;</span><br><span class="line">        List&lt;Emp&gt; empList&#x3D;empDao.listEmp();</span><br><span class="line">        empList.stream().forEach(emp -&gt; &#123;</span><br><span class="line">            String gender&#x3D;emp.getGender();</span><br><span class="line">            if(gender.equals(&quot;1&quot;))&#123;</span><br><span class="line">                emp.setGender(&quot;男&quot;);</span><br><span class="line">            &#125;else &#123;</span><br><span class="line">                emp.setGender(&quot;女&quot;);</span><br><span class="line">            &#125;</span><br><span class="line">            String job&#x3D;emp.getJob();</span><br><span class="line">            if(job.equals(&quot;1&quot;))&#123;</span><br><span class="line">                emp.setJob(&quot;讲师&quot;);</span><br><span class="line">            &#125;else if(job.equals(&quot;2&quot;))&#123;</span><br><span class="line">                emp.setJob(&quot;班主任&quot;);</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                emp.setJob(&quot;就业指导&quot;);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        return empList;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">package com.ljsblog.service;</span><br><span class="line">import com.ljsblog.pojo.Emp;</span><br><span class="line">import java.util.List;</span><br><span class="line">public interface EmpService &#123;</span><br><span class="line">    public List&lt;Emp&gt; empList();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="IOC"><a href="#IOC" class="headerlink" title="IOC"></a>IOC</h3><p><strong>Bean的声明</strong>：若要将某个对象交给IOC容器管理，需在对应的类上加上如下注解之一：  </p>
+<ul>
+<li><strong>@Component</strong>：声明bean的基础注解，不属于以下三类时，用此注解<ul>
+<li><strong>@Controller</strong>：@Component的衍生注解，标注在控制器类上，（@RestController包括@Controller）</li>
+<li><strong>@Service</strong>：@Component的衍生注解，标注在业务类上</li>
+<li><strong>@Repository</strong>：@Component的衍生注解，标注在数据访问类上（由于与mybatis整合，用得少）</li>
+</ul>
+</li>
+</ul>
+<p><strong>注意事项</strong>：</p>
+<ul>
+<li>声明bean的时候，可通过value属性指定bean的名字，若未指定，默认为类名首字母小写。  </li>
+<li>使用以上四个注解都可以声明bean，但在springboot集成web开发中，声明控制器bean只能用@Controller</li>
+</ul>
+<p><strong>范例</strong>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;controller</span><br><span class="line">package com.ljsblog.controller;</span><br><span class="line">import com.ljsblog.pojo.Emp;</span><br><span class="line">import com.ljsblog.pojo.Result;</span><br><span class="line">import com.ljsblog.service.EmpService;</span><br><span class="line">import org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line">import org.springframework.web.bind.annotation.RequestMapping;</span><br><span class="line">import org.springframework.web.bind.annotation.RestController;</span><br><span class="line">import java.util.List;</span><br><span class="line">@RestController</span><br><span class="line">public class EmpController &#123;</span><br><span class="line">    @Autowired</span><br><span class="line">    private EmpService empService;</span><br><span class="line">    @RequestMapping(&quot;&#x2F;listEmp&quot;)</span><br><span class="line">    public Result list()&#123;</span><br><span class="line">        List&lt;Emp&gt; empList&#x3D;empService.empList();</span><br><span class="line">        return Result.success(empList);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;dao</span><br><span class="line">package com.ljsblog.dao.impl;</span><br><span class="line">import com.ljsblog.dao.EmpDao;</span><br><span class="line">import com.ljsblog.pojo.Emp;</span><br><span class="line">import com.ljsblog.utils.XmlParserUtils;</span><br><span class="line">import org.springframework.stereotype.Repository;</span><br><span class="line"></span><br><span class="line">import java.util.List;</span><br><span class="line">@Repository</span><br><span class="line">public class EmpDaoA implements EmpDao &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public List&lt;Emp&gt; listEmp() &#123;</span><br><span class="line">        String file&#x3D;this.getClass().getClassLoader().getResource(&quot;emp.xml&quot;).getFile();</span><br><span class="line">        System.out.println(file);</span><br><span class="line">        List&lt;Emp&gt; empList&#x3D; XmlParserUtils.parse(file,Emp.class);</span><br><span class="line">        return empList;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">package com.ljsblog.dao;</span><br><span class="line">import com.ljsblog.pojo.Emp;</span><br><span class="line">import java.util.List;</span><br><span class="line">public interface EmpDao &#123;</span><br><span class="line">    public List&lt;Emp&gt; listEmp();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;Service</span><br><span class="line">package com.ljsblog.service.impl;</span><br><span class="line">import com.ljsblog.dao.EmpDao;</span><br><span class="line">import com.ljsblog.pojo.Emp;</span><br><span class="line">import com.ljsblog.service.EmpService;</span><br><span class="line">import org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line">import org.springframework.stereotype.Component;</span><br><span class="line">import org.springframework.stereotype.Service;</span><br><span class="line"></span><br><span class="line">import java.util.List;</span><br><span class="line">@Service</span><br><span class="line">public class EmpServiceA implements EmpService &#123;</span><br><span class="line">    @Autowired</span><br><span class="line">    private EmpDao empDao;</span><br><span class="line">    @Override</span><br><span class="line">    public List&lt;Emp&gt; empList() &#123;</span><br><span class="line">        List&lt;Emp&gt; empList&#x3D;empDao.listEmp();</span><br><span class="line">        empList.stream().forEach(emp -&gt; &#123;</span><br><span class="line">            String gender&#x3D;emp.getGender();</span><br><span class="line">            if(gender.equals(&quot;1&quot;))&#123;</span><br><span class="line">                emp.setGender(&quot;男&quot;);</span><br><span class="line">            &#125;else &#123;</span><br><span class="line">                emp.setGender(&quot;女&quot;);</span><br><span class="line">            &#125;</span><br><span class="line">            String job&#x3D;emp.getJob();</span><br><span class="line">            if(job.equals(&quot;1&quot;))&#123;</span><br><span class="line">                emp.setJob(&quot;讲师&quot;);</span><br><span class="line">            &#125;else if(job.equals(&quot;2&quot;))&#123;</span><br><span class="line">                emp.setJob(&quot;班主任&quot;);</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                emp.setJob(&quot;就业指导&quot;);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        return empList;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">package com.ljsblog.service;</span><br><span class="line">import com.ljsblog.pojo.Emp;</span><br><span class="line">import java.util.List;</span><br><span class="line">public interface EmpService &#123;</span><br><span class="line">    public List&lt;Emp&gt; empList();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>Bean组建扫描</strong>：前面声明bean的四大注解，想要生效，需被组建扫描注解@ComponentScan扫描。  </p>
+<p>@ComponentScan注解虽然没有显式配置，却已包含在启动类声明注解@SpringBootApplication中，默认扫描的范围是启动类所在包及其子包。  </p>
+<h3 id="DI"><a href="#DI" class="headerlink" title="DI"></a>DI</h3><p><strong>依赖注入的注解</strong>：</p>
+<ul>
+<li>@Autowired：默认按照类型自动装配</li>
+<li>若同类型的bean存在多个<ul>
+<li>@Primary</li>
+<li>@Autowired+@Qualifier(“bean的名称，bean默认是类的首字母小写”)</li>
+<li>@Resource(name=”bean的名称”)</li>
+</ul>
+</li>
+</ul>
+<p><strong>@Resource和@Autowired的区别</strong>：</p>
+<ol>
+<li>@Autowired是spring框架提供的注释，@Resource是JDK提供的注解</li>
+<li>@Autowired默认是按照类型注入，而@Resource默认是按照名称注入。  </li>
+</ol>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        Author:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">ljs</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        Link:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="http://example.com/2023/05/10/jw4/">http://example.com/2023/05/10/jw4/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        Reprint policy:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    All articles in this blog are used except for special statements
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    reprint polocy. If reproduced, please indicate source
+                    <a href="/about" target="_blank">ljs</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>Copied successfully, please follow the reprint policy of this article</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">more</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/JavaWeb/">
+                                    <span class="chip bg-color">JavaWeb</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="qq,wechat" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/loading.gif" data-original="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/loading.gif" data-original="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+        <link rel="stylesheet" href="/libs/gitalk/gitalk.css">
+<link rel="stylesheet" href="/css/my-gitalk.css">
+
+<div class="card gitalk-card" data-aos="fade-up">
+    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; padding-left: 20px; top: 15px; padding-bottom: 5px;">
+        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
+        <span>评论</span>
+    </div>
+    <div id="gitalk-container" class="card-content"></div>
+</div>
+
+<script src="/libs/gitalk/gitalk.min.js"></script>
+<script>
+    let gitalk = new Gitalk({
+        clientID: 'f20c0190a7dc9f5254f1',
+        clientSecret: '314c0f6b6ca0fc6867110ca87e1953b07d5eb064',
+        repo: 'contact.github.io',
+        owner: 'th-gs',
+        admin: ["th-gs"],
+        id: '2023-05-10T17-52-40',
+        distractionFreeMode: false  // Facebook-like distraction free mode
+    });
+
+    gitalk.render('gitalk-container');
+</script>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
+            <div class="card">
+                <a href="/2023/05/11/jw5/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/loading.gif" data-original="/medias/featureimages/7.jpg" class="responsive-img" alt="Mybatis（五）">
+                        
+                        <span class="card-title">Mybatis（五）</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            Mybatis
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2023-05-11
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/notes/" class="post-category">
+                                    notes
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/JavaWeb/">
+                        <span class="chip bg-color">JavaWeb</span>
+                    </a>
+                    
+                    <a href="/tags/Mybatis/">
+                        <span class="chip bg-color">Mybatis</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                Next&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2023/05/09/jw3/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/loading.gif" data-original="/medias/featureimages/10.jpg" class="responsive-img" alt="Maven和Web入门(三)">
+                        
+                        <span class="card-title">Maven和Web入门(三)</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            Maven
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-05-09
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/notes/" class="post-category">
+                                    notes
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/JavaWeb/">
+                        <span class="chip bg-color">JavaWeb</span>
+                    </a>
+                    
+                    <a href="/tags/Maven/">
+                        <span class="chip bg-color">Maven</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('120')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + 'From: ljs&#39;s blog<br />'
+            + 'Author: ljs<br />'
+            + 'Link: <a href="' + url + '">' + url + '</a><br />'
+            + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
+    });
+</script>
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;TOC</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+    <div class="container row center-align" style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2021-2023</span>
+            
+            <span id="year">2021</span>
+            <a href="/about" target="_blank">ljs</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+            &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">141.7k</span>&nbsp;字
+            
+            
+            
+            
+            
+            
+            <span id="busuanzi_container_site_pv">
+                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+            
+            
+            <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+            
+            <br>
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/th-gs" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:1501903751@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1501903751" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1501903751" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;Search</span>
+            <input type="search" id="searchInput" name="s" placeholder="Please enter a search keyword"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+<script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});</script><script>!function(n){n.imageLazyLoadSetting.processImages=i;var e=n.imageLazyLoadSetting.isSPA,r=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){e&&(r=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")));for(var t,a=0;a<r.length;a++)0<=(t=(t=r[a]).getBoundingClientRect()).bottom&&0<=t.left&&t.top<=(n.innerHeight||document.documentElement.clientHeight)&&function(){var t,e,n,i,o=r[a];t=o,e=function(){r=r.filter(function(t){return o!==t})},n=new Image,i=t.getAttribute("data-original"),n.onload=function(){t.src=i,e&&e()},n.src=i}()}i(),n.addEventListener("scroll",function(){var t,e;t=i,e=n,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(e)},500)})}(this);</script></body>
+
+</html>
