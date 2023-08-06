@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="分支和循环（二）, ljs&#39;s blog">
+    <meta name="keywords" content="存储引擎和索引（三）, ljs&#39;s blog">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>分支和循环（二） | ljs&#39;s blog</title>
+    <title>存储引擎和索引（三） | ljs&#39;s blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -289,12 +289,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/4.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/1.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">分支和循环（二）</h1>
+                    <h1 class="description center-align post-title">存储引擎和索引（三）</h1>
                 </div>
             </div>
         </div>
@@ -410,8 +410,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/C/">
-                                <span class="chip bg-color">C</span>
+                            <a href="/tags/MySQL/">
+                                <span class="chip bg-color">MySQL</span>
                             </a>
                         
                     </div>
@@ -435,7 +435,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
-                    2021-05-03
+                    2023-08-06
                 </div>
                 
 
@@ -444,7 +444,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    1.5k
+                    3.8k
                 </div>
                 
 
@@ -466,57 +466,304 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="分支和循环（二）"><a href="#分支和循环（二）" class="headerlink" title="分支和循环（二）"></a>分支和循环（二）</h1><p><strong>C语言程序结构</strong>：</p>
+                <h2 id="mysql体系结构"><a href="#mysql体系结构" class="headerlink" title="mysql体系结构"></a>mysql体系结构</h2><ul>
+<li><strong>连接层</strong>：最上层是一些客户端和链接服务，主要完成一些类似于连接处理、授权认证、及相关的安全方案。服务器也会为安全接入的每个客户端验证它所具有的操作权限。</li>
+<li><strong>服务层</strong>：第二层架构主要完成大多数的核心服务功能，如SQL接口，并完成缓存的查询，SQL的分析和优化，部分内置函数的执行。所有跨存储引擎的功能也在这一层实现，如过程、函数等。</li>
+<li><strong>引擎层</strong>：存储引擎真正的负责了MySQL中数据的存储和提取,服务器通过API和存储引擎进行通信。不同的存储引擎具有不同的功能,这样我们可以根据自己的需要，来选取合适的存储引擎。</li>
+<li><strong>存储层</strong>主要是将数据存储在文件系统之上，并完成与存储引擎的交互。</li>
+</ul>
+<h2 id="存储引擎"><a href="#存储引擎" class="headerlink" title="存储引擎"></a>存储引擎</h2><p><strong>存储引擎</strong>就是存储数据，建立索引，更新/查询数据等技术的实现方式。  </p>
+<p><strong>存储引擎</strong>是基于表的，不是基于库的，存储引擎也被称为<strong>表类型</strong>。  </p>
+<p><strong>查看当前数据库支持的存储引擎：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show engines;</span><br></pre></td></tr></table></figure>
+<p><strong>创建表时，指定存储引擎（默认是InnoDB）</strong>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">create table 表名(</span><br><span class="line">	字段1 类型 [comment 字段1注释],</span><br><span class="line">	字段2 类型 [comment 字段2注释]</span><br><span class="line">)engine&#x3D;引擎 [comment 表注释];</span><br></pre></td></tr></table></figure>
+<h3 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h3><h4 id="InnoDB"><a href="#InnoDB" class="headerlink" title="InnoDB"></a>InnoDB</h4><p><strong>InnoDB</strong>是一种高可靠性和高性能的通用存储引擎，在mysql5.5之后，InnoDB是默认的mysql存储引擎。  </p>
+<p><strong>特点</strong>：</p>
+<ol>
+<li>DML操作遵循ACID模型，支持事物</li>
+<li>行级锁，提高并发访问性能</li>
+<li>支持外键foreign key约束，保证数据的完整性和正确性</li>
+</ol>
+<p><strong>文件</strong>：xxx.ibd  </p>
+<p>xxx代表的是表名，InnoDB引擎的每张表都会对应这样一个表空间文件，存储该表的表结构（frm,sdi），数据和索引（参数：innodb_file_per_table）  </p>
+<p><strong>逻辑结构</strong>：</p>
 <ul>
-<li>顺序结构</li>
-<li>选择（分支）结构</li>
-<li>循环结构</li>
+<li>TableSpace:表空间</li>
+<li>Segment：段</li>
+<li>Extent：区</li>
+<li>Page：页</li>
+<li>Row：行</li>
 </ul>
-<p><strong>顺序结构</strong>：自上向下依次执行的程序，没有分支，没有循环<br><strong>选择（分支）结构</strong>：用于判断给定的条件，根据判断的结果来控制程序的流程<br><strong>循环结构</strong>：循环结构是指在程序中需要反复执行某个功能而设置的一种程序结构。它由循环体中的条件，判断继续执行某个功能还是退出循环。</p>
-<h3 id="语句"><a href="#语句" class="headerlink" title="语句"></a>语句</h3><p>C语言中由一个分号;隔开的就是一条语句。例：<br><code>printf(&quot;boke&quot;);</code><br><code>1+2;</code></p>
-<h3 id="C语言中表示真假"><a href="#C语言中表示真假" class="headerlink" title="C语言中表示真假"></a>C语言中表示真假</h3><p>0表示假，非0表示真</p>
-<h3 id="分支语句"><a href="#分支语句" class="headerlink" title="分支语句"></a>分支语句</h3><h4 id="1-if语句"><a href="#1-if语句" class="headerlink" title="1.if语句"></a>1.if语句</h4><p>语法结构：<br>如果条件表达式的结果为真，则语句执行  </p>
-<blockquote>
-<p>单分支if语句：</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">if (条件表达式)</span><br><span class="line">&#123;</span><br><span class="line">  语句组1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>双分支if语句：</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">if (条件表达式)</span><br><span class="line">&#123;</span><br><span class="line">  语句组1;</span><br><span class="line">&#125;</span><br><span class="line">else</span><br><span class="line">&#123;</span><br><span class="line">  语句组2;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>多分支选择结构：</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">if (表达式1)</span><br><span class="line">&#123;</span><br><span class="line">  语句组1;</span><br><span class="line">&#125;</span><br><span class="line">else if (表达式2)</span><br><span class="line">&#123;</span><br><span class="line">  语句组2;</span><br><span class="line">&#125;</span><br><span class="line">else if (表达式3)</span><br><span class="line">&#123;</span><br><span class="line">  语句组3;</span><br><span class="line">&#125;</span><br><span class="line">...</span><br><span class="line">else</span><br><span class="line">&#123;</span><br><span class="line">  语句组n;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><strong>注</strong>：else和离它最近的未匹配的if的匹配<br>例：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">	int a&#x3D;0,b&#x3D;0;</span><br><span class="line">	if(a&#x3D;&#x3D;1)</span><br><span class="line">		if(b&#x3D;&#x3D;0)</span><br><span class="line">			printf(&quot;1\n&quot;);</span><br><span class="line">	else</span><br><span class="line">		printf(&quot;2&quot;);</span><br><span class="line">	return 0;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F;最终结果是什么也没打印</span><br></pre></td></tr></table></figure>
-<h4 id="2-switch-case语句"><a href="#2-switch-case语句" class="headerlink" title="2.switch case语句"></a>2.switch case语句</h4><blockquote>
-<p>语法结构：  </p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">switch(表达式)&#x2F;&#x2F;注：表达式必须是整形</span><br><span class="line">&#123;</span><br><span class="line">    case 整型数值1: </span><br><span class="line">    语句 1;</span><br><span class="line">    break;</span><br><span class="line">    &#x2F;&#x2F;break用来跳出 switch 语句</span><br><span class="line">    &#x2F;&#x2F;break可加可不加，视情况而定</span><br><span class="line">    case 整型数值2: </span><br><span class="line">    语句 2;</span><br><span class="line">    break;</span><br><span class="line">    ......</span><br><span class="line">    case 整型数值n: </span><br><span class="line">    语句 n;</span><br><span class="line">    break;</span><br><span class="line">    default:</span><br><span class="line">    语句 n+1;</span><br><span class="line">    break;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="循环语句"><a href="#循环语句" class="headerlink" title="循环语句"></a>循环语句</h3><h4 id="1-while语句"><a href="#1-while语句" class="headerlink" title="1.while语句"></a>1.while语句</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;语法结构</span><br><span class="line">while(表达式) &#x2F;&#x2F;while语句在表达式为假(或0)之前重复执行</span><br><span class="line">&#123; </span><br><span class="line">    循环体语句;</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
-<h4 id="2-do-while语句"><a href="#2-do-while语句" class="headerlink" title="2.do-while语句"></a>2.do-while语句</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;语法结构</span><br><span class="line">do </span><br><span class="line">&#123;</span><br><span class="line">    循环体语句;</span><br><span class="line">&#125;while(表达式); &#x2F;&#x2F;do-while语句在表达式为假(或0)之前重复执行</span><br></pre></td></tr></table></figure>
-<h4 id="3-for语句"><a href="#3-for语句" class="headerlink" title="3.for语句"></a>3.for语句</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;语法结构</span><br><span class="line">for(初始化表达式;判断表达式;更新表达式) &#x2F;&#x2F;for语句在判断表达式为假(或0)之前重复执行</span><br><span class="line">&#123; </span><br><span class="line">    循环体语句;</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
-<h4 id="while，do-while，for的区别"><a href="#while，do-while，for的区别" class="headerlink" title="while，do-while，for的区别"></a>while，do-while，for的区别</h4><ul>
-<li>while语句先判断后执行，循环体可能不执行。</li>
-<li>do-while语句先执行后判断，循环体至少执行一次。</li>
-<li>for语句先判断后执行，相比while更简洁。</li>
+<h4 id="MyISAM"><a href="#MyISAM" class="headerlink" title="MyISAM"></a>MyISAM</h4><p><strong>介绍</strong>：MyISAM是mysql早期默认存储引擎。  </p>
+<p><strong>特点</strong>：</p>
+<ol>
+<li>不支持事务，不支持外键</li>
+<li>支持表锁，不支持行锁</li>
+<li>访问速度快</li>
+</ol>
+<p><strong>文件</strong>：</p>
+<ul>
+<li>xxx.sdi：存储表结构信息</li>
+<li>xxx.MYD：存储数据</li>
+<li>xxx.MYI：存储索引</li>
 </ul>
-<h3 id="break和continue的区别"><a href="#break和continue的区别" class="headerlink" title="break和continue的区别"></a>break和continue的区别</h3><p><strong>break的用法:</strong></p>
-<blockquote>
-<p>1.用来跳出switch case 语句,例子见switch case语句语法结构。<br>2.当 break 关键字用于循环时，会终止循环而执行整个循环语句后面的代码，例子见下。</p>
-</blockquote>
-<p>例：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">	int i&#x3D;1;</span><br><span class="line">	while(i&lt;&#x3D;10)</span><br><span class="line">	&#123;</span><br><span class="line">		</span><br><span class="line">		if(i&#x3D;&#x3D;5)</span><br><span class="line">		&#123;</span><br><span class="line">			break;</span><br><span class="line">		&#125;</span><br><span class="line">		printf(&quot;%d &quot;,i);</span><br><span class="line">		i++;</span><br><span class="line">	&#125;</span><br><span class="line">	return 0;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F;打印结果为1 2 3 4 </span><br></pre></td></tr></table></figure>
-<p><strong>continue的用法：</strong></p>
-<blockquote>
-<p>continue 语句的作用是跳过循环体中剩余的语句而强制进入下一次循环。</p>
-</blockquote>
-<p>例:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;错误示范</span><br><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">	int i&#x3D;1;</span><br><span class="line">	while(i&lt;&#x3D;10)</span><br><span class="line">	&#123;</span><br><span class="line">		if(i&#x3D;&#x3D;5)</span><br><span class="line">		&#123;</span><br><span class="line">			continue;</span><br><span class="line">		&#125;</span><br><span class="line">		printf(&quot;%d &quot;,i);</span><br><span class="line">		i++;</span><br><span class="line">	&#125;</span><br><span class="line">	return 0;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F;结果打印完1 2 3 4 后陷入死循环</span><br><span class="line">&#x2F;&#x2F;正确示范</span><br><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">	int i&#x3D;0;</span><br><span class="line">	while(i&lt;10)</span><br><span class="line">	&#123;</span><br><span class="line">		i++;</span><br><span class="line">		if(i&#x3D;&#x3D;5)</span><br><span class="line">		&#123;</span><br><span class="line">			continue;</span><br><span class="line">		&#125;</span><br><span class="line">		printf(&quot;%d &quot;,i);</span><br><span class="line">	&#125;</span><br><span class="line">	return 0;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F;结果1 2 3 4 6 7 8 9 10 </span><br></pre></td></tr></table></figure>
-<h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><h4 id="在有序数组中找数字"><a href="#在有序数组中找数字" class="headerlink" title="在有序数组中找数字"></a>在有序数组中找数字</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">	int a[]&#x3D;&#123;1,2,3,4,5,6,7,8,9&#125;;</span><br><span class="line">	int right&#x3D;sizeof(a)&#x2F;sizeof(a[0])-1;</span><br><span class="line">	int left&#x3D;0,mid&#x3D;0,b;</span><br><span class="line">	scanf(&quot;%d&quot;,&amp;b);</span><br><span class="line">	while(left&lt;&#x3D;right) </span><br><span class="line">	&#123;</span><br><span class="line">		mid&#x3D;(left+right)&#x2F;2;</span><br><span class="line">		if(b&gt;a[mid])</span><br><span class="line">		&#123;</span><br><span class="line">			left&#x3D;mid+1;</span><br><span class="line">		&#125;</span><br><span class="line">		else if(b&lt;a[mid])</span><br><span class="line">		&#123;</span><br><span class="line">			right&#x3D;mid-1;</span><br><span class="line">		&#125;</span><br><span class="line">		else</span><br><span class="line">		&#123;</span><br><span class="line">			printf(&quot;下标为%d\n&quot;,mid);</span><br><span class="line">			break;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	if(left&gt;right)</span><br><span class="line">	&#123;</span><br><span class="line">		printf(&quot;没找到\n&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">	return 0;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;*</span><br><span class="line">输入6</span><br><span class="line">结果为</span><br><span class="line">下标为5</span><br><span class="line">*&#x2F;</span><br></pre></td></tr></table></figure>
-<h4 id="求101-200间的素数"><a href="#求101-200间的素数" class="headerlink" title="求101-200间的素数"></a>求101-200间的素数</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;math.h&gt;</span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">	int i&#x3D;0,j&#x3D;0,count&#x3D;0;</span><br><span class="line">	for(i&#x3D;101;i&lt;&#x3D;200;i+&#x3D;2)</span><br><span class="line">	&#x2F;&#x2F;用i+&#x3D;2而不是用i++</span><br><span class="line">	&#x2F;&#x2F;原因：是因为素数肯定不是偶数，所以用i+&#x3D;2效率会更高</span><br><span class="line">	&#123;</span><br><span class="line">		for(j&#x3D;2;j&lt;&#x3D;sqrt(i);j++)</span><br><span class="line">		&#x2F;&#x2F;sqrt()是开平方，需要调用math.h</span><br><span class="line">		&#x2F;&#x2F;用j&lt;&#x3D;sqrt(i)而不是用j&lt;i</span><br><span class="line">		&#x2F;&#x2F;原因：若i&#x3D;a*b,则a和b中至少有一个数字小于等于开平方i，所以用j&lt;sqrt(i)效率会更高</span><br><span class="line">		&#123;</span><br><span class="line">			if(i%j&#x3D;&#x3D;0)</span><br><span class="line">			&#123;</span><br><span class="line">				break;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		if(j&gt;sqrt(i))</span><br><span class="line">		&#123;</span><br><span class="line">			printf(&quot;%d\n&quot;,i);</span><br><span class="line">			count++;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	printf(&quot;素数的个数为%d\n&quot;,count);</span><br><span class="line">	return 0;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;*结果为</span><br><span class="line">101</span><br><span class="line">103</span><br><span class="line">107</span><br><span class="line">109</span><br><span class="line">113</span><br><span class="line">127</span><br><span class="line">131</span><br><span class="line">137</span><br><span class="line">139</span><br><span class="line">149</span><br><span class="line">151</span><br><span class="line">157</span><br><span class="line">163</span><br><span class="line">167</span><br><span class="line">173</span><br><span class="line">179</span><br><span class="line">181</span><br><span class="line">191</span><br><span class="line">193</span><br><span class="line">197</span><br><span class="line">199</span><br><span class="line">素数的个数为21</span><br><span class="line">*&#x2F;</span><br></pre></td></tr></table></figure>
-<h4 id="九九乘法表"><a href="#九九乘法表" class="headerlink" title="九九乘法表"></a>九九乘法表</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;九九乘法表</span><br><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">	int i&#x3D;1,j&#x3D;1;</span><br><span class="line">	for(i&#x3D;1;i&lt;&#x3D;9;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		for(j&#x3D;1;j&lt;&#x3D;i;j++)</span><br><span class="line">		&#123;</span><br><span class="line">			printf(&quot;%d*%d&#x3D;%-2d &quot;,j,i,j*i);</span><br><span class="line">		&#125;</span><br><span class="line">		printf(&quot;\n&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">	return 0;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;*结果为</span><br><span class="line">1*1&#x3D;1</span><br><span class="line">1*2&#x3D;2  2*2&#x3D;4</span><br><span class="line">1*3&#x3D;3  2*3&#x3D;6  3*3&#x3D;9</span><br><span class="line">1*4&#x3D;4  2*4&#x3D;8  3*4&#x3D;12 4*4&#x3D;16</span><br><span class="line">1*5&#x3D;5  2*5&#x3D;10 3*5&#x3D;15 4*5&#x3D;20 5*5&#x3D;25</span><br><span class="line">1*6&#x3D;6  2*6&#x3D;12 3*6&#x3D;18 4*6&#x3D;24 5*6&#x3D;30 6*6&#x3D;36</span><br><span class="line">1*7&#x3D;7  2*7&#x3D;14 3*7&#x3D;21 4*7&#x3D;28 5*7&#x3D;35 6*7&#x3D;42 7*7&#x3D;49</span><br><span class="line">1*8&#x3D;8  2*8&#x3D;16 3*8&#x3D;24 4*8&#x3D;32 5*8&#x3D;40 6*8&#x3D;48 7*8&#x3D;56 8*8&#x3D;64</span><br><span class="line">1*9&#x3D;9  2*9&#x3D;18 3*9&#x3D;27 4*9&#x3D;36 5*9&#x3D;45 6*9&#x3D;54 7*9&#x3D;63 8*9&#x3D;72 9*9&#x3D;81</span><br><span class="line">*&#x2F;</span><br></pre></td></tr></table></figure>
+<h4 id="Memory"><a href="#Memory" class="headerlink" title="Memory"></a>Memory</h4><p><strong>介绍</strong>：Memory引擎的表数据时存储在内存中，由于受到硬件文件，或断电问题的影响，只能将这些表作为临时表或缓存使用。  </p>
+<p><strong>特点</strong>：</p>
+<ol>
+<li>内存存放</li>
+<li>hash索引（默认）</li>
+</ol>
+<p><strong>文件</strong>：  </p>
+<p>xxx.sdi：存储表结构信息</p>
+<h3 id="选择"><a href="#选择" class="headerlink" title="选择"></a>选择</h3><p>根据应用系统的特点选择合适的存储引擎，对于复杂的应用的系统，可根据实际情况选择多种存储引擎进行组合。</p>
+<ul>
+<li>InnoDB：绝大部分情况下的选择，是mysql的默认存储引擎，支持事务，外键，若应用对事务的完整性有比较高的要求，在并发条件下要求数据的一致性，数据操作除了插入和查询之外，还包括很多的更新，删除操作，那么InnoDB存储引擎是比较合适的选择</li>
+<li>MyISAM：若应用是以读操作和插入操作为主，只有很少的更新和删除操作，并对事务的完整性，并发性要求不是很高，那选择这个存储引擎时非常合适的</li>
+<li>MEMORY：将所有数据保存在内存中，访问速度快，通常用于临时表及缓存。MEMORY的缺陷就是对表的大小有限制，太大的表无法缓存在内存中，而且无法保障数据的安全性。</li>
+</ul>
+<h2 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h2><p>MySQL中的索引（index）是一种数据结构，用于加快数据库的查询操作。索引可以理解为一个快速访问数据的目录，类似于书籍的目录，它可以通过指向存储数据的物理位置，使得数据库的查询操作更加高效和快速。  </p>
+<h3 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h3><p><strong>优点</strong>：</p>
+<ul>
+<li>提高数据检索的效率，降低数据库IO成本</li>
+<li>通过索引对数据进行排序，降低数据排序的成本，降低CPU的消耗</li>
+</ul>
+<p><strong>缺点</strong>：</p>
+<ul>
+<li>索引列也是要占用空间的</li>
+<li>索引降低更新表的速度，例如对表进行增删改时，效率降低</li>
+</ul>
+<h3 id="索引结构"><a href="#索引结构" class="headerlink" title="索引结构"></a>索引结构</h3><p>mysql的索引是在存储引擎层实现的，不同的存储引擎有不同的结构，主要包含以下几种：</p>
+<ul>
+<li>B+Tree索引<ul>
+<li>最常见的索引类型，大部分引擎都支持B+树索引</li>
+</ul>
+</li>
+<li>Hash索引<ul>
+<li>底层数据结构是用哈希表实现的，只有精确匹配索引列的查询才有效，不支持范围查询</li>
+</ul>
+</li>
+<li>R-tree<ul>
+<li>空间索引是MyISAM引擎的一个特殊索引类型，主要用于地理空间数据类型，通常使用较少</li>
+</ul>
+</li>
+<li>Full-text<ul>
+<li>全文索引是一种建立倒排索引，快速匹配文档的方式，类似于Lucene，Solr，ES</li>
+</ul>
+</li>
+</ul>
+<p><strong>引擎对索引的支持情况</strong>：</p>
+<ul>
+<li>B+tree<ul>
+<li>InnoDB：支持</li>
+<li>MyISAM：支持</li>
+<li>Memory：支持</li>
+</ul>
+</li>
+<li>Hash<ul>
+<li>InnoDB：不支持</li>
+<li>MyISAM：不支持</li>
+<li>Memory：支持</li>
+</ul>
+</li>
+<li>R-tree<ul>
+<li>InnoDB：不支持</li>
+<li>MyISAM：支持</li>
+<li>Memory：不支持</li>
+</ul>
+</li>
+<li>Full-text<ul>
+<li>InnoDB：5.6版本之后支持</li>
+<li>MyISAM：支持</li>
+<li>Memory：不支持</li>
+</ul>
+</li>
+</ul>
+<h4 id="BTree"><a href="#BTree" class="headerlink" title="BTree"></a>BTree</h4><p>多路平衡查找树，以一个最大度数（树的度数是一个节点的子节点个数）为5的BTree为例（每个节点最多存储4个key，5个指针）</p>
+<h4 id="B-Tree"><a href="#B-Tree" class="headerlink" title="B+Tree"></a>B+Tree</h4><p>相对于BTree的区别：</p>
+<ul>
+<li>所有数据都会出现在叶子节点</li>
+<li>叶子节点形成一个单链表</li>
+</ul>
+<p>MySQL索引数据结构对经典的B+Tree进行优化，在原B+Tree的基础上，增加一个指向相邻叶子节点的链表指针，就形成了带有顺序指针的B+Tree，提高区间访问的性能。</p>
+<h4 id="Hash"><a href="#Hash" class="headerlink" title="Hash"></a>Hash</h4><p>哈希索引就是采用一定的Hash算法，将键值换算成新的hash值，映射到对应的槽位上，然后存储在hash表中。  </p>
+<p><strong>Hash索引特点</strong>：</p>
+<ol>
+<li>Hash索引只能用于对等标胶（=,in），不支持范围查询（between,&gt;,&lt;,…）</li>
+<li>无法利用索引完成排序操作</li>
+<li>查询效率高，通常只需要一次检索就可以了（若是出现哈希碰撞，便不止一次），效率通常要高于B+Tree索引</li>
+</ol>
+<p><strong>存储引擎支持</strong>：在mysql中，支持hash索引的是Memory引擎，而InnoDB具有自适应的hash功能，hash索引是存储引擎根据B+Tree索引在指定条件下自动构建的。 </p>
+<p><strong>InnoDB选择B+tree索引原因</strong>：</p>
+<ul>
+<li>相对于二叉树，层级更少，搜索效率高</li>
+<li>相对图BTree，无论是叶子节点或是非叶子节点，都会保存数据，这样导致一页中存储的键值减少，指针跟着减少，要同样保存大量数据，只能增加树的高度，导致性能降低</li>
+<li>相对Hash索引，B+Tree支持范围匹配及排序操作</li>
+</ul>
+<h3 id="索引分类"><a href="#索引分类" class="headerlink" title="索引分类"></a>索引分类</h3><ul>
+<li><strong>主键索引</strong>：针对于表中主键创建的索引。默认自动创建，只能有一个，关键字primary</li>
+<li><strong>唯一索引</strong>：避免同一个表中某数据列中的值重复，可有多个，关键字unique</li>
+<li><strong>常规索引</strong>：快速定位特定数据，可有多个</li>
+<li><strong>全文索引</strong>：全文索引查找的是文本中的关键字，而不是比较索引的值，可以有多个，fulltext</li>
+</ul>
+<p>在InnoDB存储索引中，根据索引的存储形式，又可分为以下两种：</p>
+<ul>
+<li><strong>聚集索引</strong>：将数据存储与索引放到一块，索引结构的叶子节点保存了行数据，必须有，且只有一个</li>
+<li><strong>二级索引</strong>：将数据与索引分开存储，索引结构的叶子节点关联的是对应的主键，可以存在多个</li>
+</ul>
+<h3 id="索引语法"><a href="#索引语法" class="headerlink" title="索引语法"></a>索引语法</h3><p><strong>创建索引</strong>：  </p>
+<p>create [unique|fulltext] index 索引名 on 表名（字段1,字段2…）  </p>
+<p><strong>查看索引</strong>：  </p>
+<p>show index from 表名  </p>
+<p><strong>删除索引</strong>：  </p>
+<p>drop index 索引名 on 表名  </p>
+<h3 id="SQL性能分析"><a href="#SQL性能分析" class="headerlink" title="SQL性能分析"></a>SQL性能分析</h3><h4 id="查看执行频次"><a href="#查看执行频次" class="headerlink" title="查看执行频次"></a>查看执行频次</h4><p>查看当前数据库的insert，delete，update，select访问频次：  </p>
+<p>show global status like ‘Com七个下划线’;  </p>
+<h4 id="慢查询日志"><a href="#慢查询日志" class="headerlink" title="慢查询日志"></a>慢查询日志</h4><p>慢查询日志记录所有执行时间超过指定参数（long_query_time，单位秒，默认10秒）的所有SQL语句的日志。  </p>
+<p>mysql的慢查询日志默认没有开启(可用该语句查询是否开启：show variables like ‘slow_query_log’)，需在mysql的配置文件（/etc/my.cnf）中配置如下信息：  </p>
+<ul>
+<li>开启MySQL慢日志查询开关<ul>
+<li>slow_query_log=1</li>
+</ul>
+</li>
+<li>设置慢日志的时间为2秒，sql语句执行时间超过2秒，就会视为慢查询，记录慢查询日志<ul>
+<li>long_query_time=2</li>
+</ul>
+</li>
+</ul>
+<p>配置完毕之后，通过以下执行重新启动mysql服务器进行测试，查看慢日志文件中记录的信息/var/lib/mysql/localhost-slow.log</p>
+<h4 id="profile"><a href="#profile" class="headerlink" title="profile"></a>profile</h4><ul>
+<li>show profiles能够在sql优化时帮助我们了解时间都耗费到哪里去了，通过have_profiling参数，都能够看到当前mysql是否支持profile操作：  <ul>
+<li>select @@have_profiling; </li>
+</ul>
+</li>
+<li>默认profiling是关闭的（可用该指令查询：select @@profiling），可以通过set语句在session/global级别开启profiling：  <ul>
+<li>set profiling=1;  </li>
+</ul>
+</li>
+<li>查看每一条sql的耗时基本情况<ul>
+<li>show profiles;</li>
+</ul>
+</li>
+<li>查看指定query_id的sql语句各个阶段的耗时情况<ul>
+<li>show profile for query query_id</li>
+</ul>
+</li>
+<li>查看指定query_id的sql语句CPU的使用情况<ul>
+<li>show profile cpu for query query_id;</li>
+</ul>
+</li>
+</ul>
+<h4 id="explain执行计划"><a href="#explain执行计划" class="headerlink" title="explain执行计划"></a>explain执行计划</h4><p>explain或desc命令获取mysql如何执行select语句的信息，包括select语句执行过程中表如何连接和连接的顺序。  </p>
+<p><strong>语法</strong>：  </p>
+<p>explain select 字段列表 from 表名 where 条件;  </p>
+<p><strong>explain执行计划各字段含义</strong>：</p>
+<ul>
+<li>id<ul>
+<li>select查询的序列号，表示查询中执行select子句或是操作表的顺序（id相同，执行顺序从上到下;id不同，值越大，越先执行）</li>
+</ul>
+</li>
+<li>select_type<ul>
+<li>表示select的类型，常见的取值有simple（简单表，即不使用表连接或子查询），primary（主查询，即外层的查询），union（union中的第二个或后面的查询语句），subquery（select/where之后包含子查询）等</li>
+</ul>
+</li>
+<li>type<ul>
+<li>表示连接类型，性能由好到差的连接类型为null，system，const，eq_ref，ref，range，index，all</li>
+</ul>
+</li>
+<li>possible_key<ul>
+<li>显示可能应用在这张表上的索引，一个或多个</li>
+</ul>
+</li>
+<li>key<ul>
+<li>实际使用的索引，若为null，则没有使用索引</li>
+</ul>
+</li>
+<li>key_len<ul>
+<li>表示索引中使用的字节数，该值为索引字段的最大可能长度，而非实际使用长度，在不损失精确性的前提下，长度越短越好</li>
+</ul>
+</li>
+<li>rows<ul>
+<li>mysql认为必须要执行查询的行数，在innodb引擎的表中，是一个估计值，可能并不总是准确的</li>
+</ul>
+</li>
+<li>filtered<ul>
+<li>表示返回结果的行数需读取行的百分比，filtered的值越大越好</li>
+</ul>
+</li>
+</ul>
+<h3 id="索引使用"><a href="#索引使用" class="headerlink" title="索引使用"></a>索引使用</h3><p><strong>最左前缀法则</strong>：  </p>
+<p>若索引多列（联合索引），要遵守最左前缀法则。最左前缀法则指的是查询从索引的最左列开始，且不跳过索引中的列。  </p>
+<p>若跳过某一列，索引将部分失效（后面的字段索引失效）  </p>
+<p><strong>范围查询</strong>：  </p>
+<p>联合索引中，出现范围查询（&gt;，&lt;）范围查询右侧的列索引失效。  </p>
+<p><strong>索引列运算</strong>：  </p>
+<p>不要在索引列上进行运算操作，索引将失效。  </p>
+<p><strong>字符串不加引号</strong>：  </p>
+<p>字符串类型字段使用时，不加引号，索引将失效。  </p>
+<p><strong>模糊查询</strong>：  </p>
+<p>若仅仅是尾部模糊匹配，索引不会失效，若是头部模糊匹配，索引失效。  </p>
+<p><strong>or连接的条件</strong>：  </p>
+<p>用or分割开的条件，若or前的条件中的列有索引，而后面的列中无索引，那涉及的索引都不会被用到。  </p>
+<p><strong>数据分布影响</strong>：  </p>
+<p>若mysql评估使用索引比全表更慢，则不使用索引。  </p>
+<p><strong>SQL提示</strong>：  </p>
+<p>是优化数据库的一个重要手段，就是在sql语句中加入一些人为的提示来达到优化操作的目的。  </p>
+<ul>
+<li><p>use index();  </p>
+<ul>
+<li>建议数据库用某个索引</li>
+<li>explain select * from tb_user use index(tb_pro) where profession=”软件工程”;</li>
+</ul>
+</li>
+<li><p>ignore index();  </p>
+<ul>
+<li>使数据库忽视某个索引</li>
+<li>explain select * from tb_user ignore index(tb_pro) where profession=”软件工程”;</li>
+</ul>
+</li>
+<li><p>force index();  </p>
+<ul>
+<li>强迫数据库用某个索引</li>
+<li>explain select * from tb_user force index(tb_pro) where profession=”软件工程”;</li>
+</ul>
+</li>
+</ul>
+<p><strong>覆盖索引</strong>：  </p>
+<p>尽量使用覆盖索引（查询使用了索引，并需要返回的列，在该索引中已经全部能够找到），减少select *  </p>
+<ul>
+<li>using index condition<ul>
+<li>查找使用了索引，但需要回表查询数据</li>
+</ul>
+</li>
+<li>using where;using index<ul>
+<li>查找使用了索引，但是需要的数据都在索引列中能找到，所以不需要回表查询数据</li>
+</ul>
+</li>
+</ul>
+<p><strong>前缀索引</strong>：  </p>
+<p>当字段类型为字符串（varchar，text等）时，有时需要索引很长的字符串，这会让索引变得很大，查询时，浪费大量的磁盘IO，影响查询效率，此时可以只将字符串的一部分前缀，建立索引，可节约索引空间，从而提高索引效率。  </p>
+<p><strong>语法</strong>：create index idx_xxxx on table_name(字段(n));  </p>
+<p><strong>选择性</strong>是指不重复的索引值（基数）和数据表的记录总数的比值。</p>
+<p><strong>前缀长度</strong>可根据索引的选择性来决定。 索引选择性越高则查询效率越高，唯一索引的选择性是1.是最好的索引选择性，性能也是最好的。  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select count(distinct email)&#x2F;count(*) from tb_user;  </span><br><span class="line"></span><br><span class="line">select count(distinct substring(email,1,5))&#x2F;count(*) from tb_user;</span><br></pre></td></tr></table></figure>
+<p><strong>单列索引与联合索引</strong>：  </p>
+<ul>
+<li>单列索引即一个索引只包含单个列</li>
+<li>联合索引即一个索引包含了多个列</li>
+<li>在业务场景中，若存在多个查询条件，考虑针对于查询字段建立索引时，建议建立联合索引，而非单列索引</li>
+</ul>
+<p>多条件联合查询时，mysql优化器会评估哪个字段的索引效率更高，会选择该索引完成本次查询。  </p>
+<h3 id="索引设计原则"><a href="#索引设计原则" class="headerlink" title="索引设计原则"></a>索引设计原则</h3><ul>
+<li>针对于数据量较大,且查询比较频繁的表建立索引。</li>
+<li>针对于常作为查询条件(where)、排序(order by)、分组(group by)操作的字段建立索引。</li>
+<li>尽量选择区分度高的列作为索引，尽量建立唯一索引，区分度越高，使用索引的效率越高。</li>
+<li>若是字符串类型的字段，字段的长度较长，可以针对于字段的特点，建立前缀索引。</li>
+<li>尽量使用联合索引，减少单列索引,查询时，联合索引很多时候可以覆盖索引，节省存储空间，避免回表，提高查询效率。</li>
+<li>要控制索引的数量,索引并不是多多益善,索引越多,雄护索引结构的代价也就越大,会影响增删改的效率。</li>
+<li>若索引列不能存储NULL值,请在创建表时使用NOT NULL约束它。当优化器知道每列是否包含NULL值时,它可以更好地确定哪个索引最有效地用于查询。</li>
+</ul>
+
                 
             </div>
             <hr/>
@@ -542,7 +789,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://example.com/2021/05/03/c2/">http://example.com/2021/05/03/c2/</a>
+                    <a href="http://example.com/2023/08/06/mysql3/">http://example.com/2023/08/06/mysql3/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -580,8 +827,8 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/C/">
-                                    <span class="chip bg-color">C</span>
+                                <a href="/tags/MySQL/">
+                                    <span class="chip bg-color">MySQL</span>
                                 </a>
                             
                         </div>
@@ -752,7 +999,7 @@
         repo: 'contact.github.io',
         owner: 'th-gs',
         admin: ["th-gs"],
-        id: '2021-05-03T10-31-52',
+        id: '2023-08-06T22-29-34',
         distractionFreeMode: false  // Facebook-like distraction free mode
     });
 
@@ -778,29 +1025,30 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
+                <i class="far fa-dot-circle"></i>&nbsp;Current
+            </div>
             <div class="card">
-                <a href="/2021/05/09/c3/">
+                <a href="/2023/08/06/mysql3/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/loading.gif" data-original="/medias/featureimages/10.jpg" class="responsive-img" alt="函数（三）">
+                        <img src="/medias/loading.gif" data-original="/medias/featureimages/1.jpg" class="responsive-img" alt="存储引擎和索引（三）">
                         
-                        <span class="card-title">函数（三）</span>
+                        <span class="card-title">存储引擎和索引（三）</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            函数
+                            存储引擎和索引
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2021-05-09
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-08-06
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -813,11 +1061,12 @@
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/C/">
-                        <span class="chip bg-color">C</span>
+                    <a href="/tags/MySQL/">
+                        <span class="chip bg-color">MySQL</span>
                     </a>
                     
                 </div>
@@ -831,24 +1080,24 @@
                 Next&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2021/04/29/c1/">
+                <a href="/2023/08/02/mysql2/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/loading.gif" data-original="/medias/featureimages/10.jpg" class="responsive-img" alt="初识C语言（一）">
+                        <img src="/medias/loading.gif" data-original="/medias/featureimages/1.jpg" class="responsive-img" alt="MySQL基础（二）">
                         
-                        <span class="card-title">初识C语言（一）</span>
+                        <span class="card-title">MySQL基础（二）</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            初识C语言
+                            MySQL基础
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-04-29
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-08-02
                             </span>
                         <span class="publish-author">
                             
@@ -865,8 +1114,8 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/C/">
-                        <span class="chip bg-color">C</span>
+                    <a href="/tags/MySQL/">
+                        <span class="chip bg-color">MySQL</span>
                     </a>
                     
                 </div>
