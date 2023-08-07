@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="存储引擎和索引（三）, ljs&#39;s blog">
+    <meta name="keywords" content="sql优化和视图（四）, ljs&#39;s blog">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>存储引擎和索引（三） | ljs&#39;s blog</title>
+    <title>sql优化和视图（四） | ljs&#39;s blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -289,12 +289,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/1.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/9.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">存储引擎和索引（三）</h1>
+                    <h1 class="description center-align post-title">sql优化和视图（四）</h1>
                 </div>
             </div>
         </div>
@@ -435,7 +435,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
-                    2023-08-06
+                    2023-08-07
                 </div>
                 
 
@@ -444,7 +444,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    3.8k
+                    1.8k
                 </div>
                 
 
@@ -466,302 +466,121 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="存储引擎和索引（三）"><a href="#存储引擎和索引（三）" class="headerlink" title="存储引擎和索引（三）"></a>存储引擎和索引（三）</h1><h2 id="mysql体系结构"><a href="#mysql体系结构" class="headerlink" title="mysql体系结构"></a>mysql体系结构</h2><ul>
-<li><strong>连接层</strong>：最上层是一些客户端和链接服务，主要完成一些类似于连接处理、授权认证、及相关的安全方案。服务器也会为安全接入的每个客户端验证它所具有的操作权限。</li>
-<li><strong>服务层</strong>：第二层架构主要完成大多数的核心服务功能，如SQL接口，并完成缓存的查询，SQL的分析和优化，部分内置函数的执行。所有跨存储引擎的功能也在这一层实现，如过程、函数等。</li>
-<li><strong>引擎层</strong>：存储引擎真正的负责了MySQL中数据的存储和提取,服务器通过API和存储引擎进行通信。不同的存储引擎具有不同的功能,这样我们可以根据自己的需要，来选取合适的存储引擎。</li>
-<li><strong>存储层</strong>主要是将数据存储在文件系统之上，并完成与存储引擎的交互。</li>
+                <h1 id="sql优化和视图（四）"><a href="#sql优化和视图（四）" class="headerlink" title="sql优化和视图（四）"></a>sql优化和视图（四）</h1><h2 id="SQL优化"><a href="#SQL优化" class="headerlink" title="SQL优化"></a>SQL优化</h2><h3 id="insert优化"><a href="#insert优化" class="headerlink" title="insert优化"></a>insert优化</h3><ul>
+<li>批量插入</li>
+<li>手动提交事务</li>
+<li>主键顺序插入（顺序插入性能高于乱序插入）</li>
 </ul>
-<h2 id="存储引擎"><a href="#存储引擎" class="headerlink" title="存储引擎"></a>存储引擎</h2><p><strong>存储引擎</strong>就是存储数据，建立索引，更新/查询数据等技术的实现方式。  </p>
-<p><strong>存储引擎</strong>是基于表的，不是基于库的，存储引擎也被称为<strong>表类型</strong>。  </p>
-<p><strong>查看当前数据库支持的存储引擎：</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show engines;</span><br></pre></td></tr></table></figure>
-<p><strong>创建表时，指定存储引擎（默认是InnoDB）</strong>：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">create table 表名(</span><br><span class="line">	字段1 类型 [comment 字段1注释],</span><br><span class="line">	字段2 类型 [comment 字段2注释]</span><br><span class="line">)engine&#x3D;引擎 [comment 表注释];</span><br></pre></td></tr></table></figure>
-<h3 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h3><h4 id="InnoDB"><a href="#InnoDB" class="headerlink" title="InnoDB"></a>InnoDB</h4><p><strong>InnoDB</strong>是一种高可靠性和高性能的通用存储引擎，在mysql5.5之后，InnoDB是默认的mysql存储引擎。  </p>
-<p><strong>特点</strong>：</p>
+<h3 id="大批量插入数据"><a href="#大批量插入数据" class="headerlink" title="大批量插入数据"></a>大批量插入数据</h3><p>若一次性需要插入大批量数据，使用insert语句插入性能较低，此时可使用mysql数据库提供的load指令进行插入。</p>
+<ul>
+<li>客户端连接服务端，加上参数–local-infile<ul>
+<li>mysql –local-infile -u -root -p</li>
+</ul>
+</li>
+<li>查看全局参数local_infile状态<ul>
+<li>select @@local_infile</li>
+</ul>
+</li>
+<li>设置全局参数local_infile为1，开启从本地加载文件导入数据的开关<ul>
+<li>set global local_infile=1</li>
+</ul>
+</li>
+<li>执行load指令将准备好的数据，加载到表结构中<ul>
+<li>load data local infile ‘数据存放的目录’ into table 表名 fields terminated by ‘数据中字段分割符号’ lines terminated by ‘\n’</li>
+</ul>
+</li>
+</ul>
+<h3 id="主键优化"><a href="#主键优化" class="headerlink" title="主键优化"></a>主键优化</h3><p><strong>数据组织方式</strong>：在InnoDB存储引擎中，表数据都是根据主键顺序组织存放的，这种存储方式的表称为索引组织表。  </p>
+<p><strong>页分裂</strong>：页可以为空，也可填充一半，也可填充100%，每个页包含2-N行数据（若一行数据多大，会行溢出），根据主键排列。  </p>
+<p><strong>页合并</strong>：当删除一行记录时，实际上记录并没有被物理删除，只是记录被标记为删除且它的空间变得允许被其他记录声明使用。当页中删除额记录达到merge_threshold(合并页的阈值，默认为页的50%，可自己设置，在创建表或创建索引时指定)，InnoDB会开始寻找最靠近的页（前或后）看看是否可将两个页合并以优化空间使用</p>
+<p><strong>主键设计原则</strong>：</p>
+<ul>
+<li>满足业务需求的情况下，尽量降低主键的长度</li>
+<li>插入数据时，尽量选择顺序插入，选择使用auto_increment自增主键</li>
+<li>尽量不要用UUID做主键或是其他自然主键，如省份证号</li>
+<li>业务操作时，避免对主键的修改</li>
+</ul>
+<h3 id="order-by优化"><a href="#order-by优化" class="headerlink" title="order by优化"></a>order by优化</h3><p><strong>排序方式</strong>：</p>
 <ol>
-<li>DML操作遵循ACID模型，支持事物</li>
-<li>行级锁，提高并发访问性能</li>
-<li>支持外键foreign key约束，保证数据的完整性和正确性</li>
+<li>通过对返回数据进行排序，也就是filesort排序，所有不是通过索引直接返回排序结果的排序豆角filesort排序</li>
+<li>通过有序索引顺序扫描直接返回有序数据，这种情况即为using index，不需额外排序，操作效率高</li>
 </ol>
-<p><strong>文件</strong>：xxx.ibd  </p>
-<p>xxx代表的是表名，InnoDB引擎的每张表都会对应这样一个表空间文件，存储该表的表结构（frm,sdi），数据和索引（参数：innodb_file_per_table）  </p>
-<p><strong>逻辑结构</strong>：</p>
+<p>根据排序字段建立合适的索引，多字段排序时，也遵循最左侧前缀法则。  </p>
+<p>order by后边的多个排序字段要求尽量排序方式相同。  </p>
+<p>order by后边的多个排序字段顺序尽量和联合索引字段顺序一致。  </p>
+<p>尽量使用覆盖索引。  </p>
+<p>多字段排序，一个升序一个降序，需注意联合索引在创建时的规则（ASC/DESC）。  </p>
+<p>若不可避免的出现filesort，大数据量排序时，可适当增大排序缓冲区大小sort_buffer_size（默认256K）</p>
+<h3 id="group-by优化"><a href="#group-by优化" class="headerlink" title="group by优化"></a>group by优化</h3><p>分组操作时，可通过索引来提高效率。  </p>
+<p>分组操作时，索引的使用也是满足最左前缀法则的。  </p>
+<h3 id="limit优化"><a href="#limit优化" class="headerlink" title="limit优化"></a>limit优化</h3><p>一般分页查询时，通过创建覆盖索引能够比较好地提高性能，可通过覆盖索引加子查询形式进行优化。  </p>
+<h3 id="count优化"><a href="#count优化" class="headerlink" title="count优化"></a>count优化</h3><p><strong>count用法</strong>：</p>
 <ul>
-<li>TableSpace:表空间</li>
-<li>Segment：段</li>
-<li>Extent：区</li>
-<li>Page：页</li>
-<li>Row：行</li>
+<li>count(主键)<ul>
+<li>InnoDB引擎会遍历整张表，把每一行的主键id值都取出来，返回给服务层，服务层拿到主键后，直接按行进行累加（主键不可能为null）</li>
 </ul>
-<h4 id="MyISAM"><a href="#MyISAM" class="headerlink" title="MyISAM"></a>MyISAM</h4><p><strong>介绍</strong>：MyISAM是mysql早期默认存储引擎。  </p>
-<p><strong>特点</strong>：</p>
+</li>
+<li>count(字段)<ul>
+<li>无not null约束：InnoDB引擎会遍历整张表把每一行的字段值都取出来，返回服务层，服务层判断是否为null，不为null，技术增加</li>
+<li>有not null约束：InnoDB引擎会遍历整张表把每一行的字段值都取出来，返回给服务层，直接按行进行累加</li>
+</ul>
+</li>
+<li>count(1)<ul>
+<li>InnoDB引擎遍历整张表，但不取值，服务层对于返回的每一行，放一个数字“1”进去，直接按行进行累加</li>
+</ul>
+</li>
+<li>count(*)<ul>
+<li>InnoDB引擎并不会把全部字段取出来，而是专门做了优化，不取值，服务层直接按行进行累加</li>
+</ul>
+</li>
+</ul>
+<p>按照效率排序的话，count(字段)&lt;count(主键 id)&lt;count(1)≈count( * )。<br>尽量使用count( * )</p>
+<h3 id="update优化"><a href="#update优化" class="headerlink" title="update优化"></a>update优化</h3><p>InnoDB的行锁是针对索引加的锁，不是针对记录加的锁，并且该索引不能失效，否则会从行锁升级为表锁。  </p>
+<h2 id="视图"><a href="#视图" class="headerlink" title="视图"></a>视图</h2><p>视图是一种虚拟存在的表，视图中的数据并不在数据库中实际存在，行和列数据来自定义视图的查询中使用的表，并且是在使用视图时动态生成的。  </p>
+<p>简单来讲，视图只保存了查询的sql逻辑，不保存查询结果，所以我们在创建视图时，主要的工作就落在创建这条sql查询语句上。  </p>
+<h3 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h3><h4 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h4><p>create [or replace] view 视图名称[(列名列表)] as select [with[ cascaded|local] check option]</p>
+<h4 id="查询"><a href="#查询" class="headerlink" title="查询"></a>查询</h4><p><strong>查看创建视图语句</strong>：  </p>
+<p>show create  view 视图名称;  </p>
+<p><strong>查看视图数据</strong>:  </p>
+<p>select * from 视图名称…;  </p>
+<h4 id="修改"><a href="#修改" class="headerlink" title="修改"></a>修改</h4><p><strong>方式一</strong>：  </p>
+<p>create [or replace] view 视图名称[(列表名称)] as select语句 [with[ cascaded|local] check option]  </p>
+<p><strong>方式二</strong>：  </p>
+<p>alter view 视图名称[(列表名称)] as select语句 [with[ cascaded|local] check option]  </p>
+<h4 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h4><p>drop view [if exits] 视图名称 [,视图名称]…  </p>
+<h4 id="检查选项"><a href="#检查选项" class="headerlink" title="检查选项"></a>检查选项</h4><p>当使用with check option子句创建视图时，mysql会通过视图检查正在更改的每个行，例如：插入，更新，删除，以使其符合视图的定义，mysql允许基于另一个视图创建视图，它还会检查依赖视图中的规则以保持一致性。为确定检查的范围，mysql提供cascaded和local两个选项，默认值为cascaded。</p>
+<ul>
+<li>cascaded<ul>
+<li>假设有两个视图，分别为v2，v1。v2视图是基于v1视图的，若在v2创建时指定检查选项为 cascaded，v1创建时未指定检查选项。 则在执行检查时，不仅会检查v2，还会级联检查v2的关联视图v1。</li>
+</ul>
+</li>
+<li>local<ul>
+<li>假设有两个视图，分别为v2，v1。v2视图是基于v1视图的，若在v2创建时指定了检查选项为 local ，v1创建时未指定检查选项。 则在执行检查时，只检查v2，不检查v2的关联视图v1，若v1创建时指定检查选项，则v1v2都检查。</li>
+</ul>
+</li>
+</ul>
+<h3 id="视图的更新"><a href="#视图的更新" class="headerlink" title="视图的更新"></a>视图的更新</h3><p>更新视图的前提是视图中的行与基础表中的行必须存在一对一的关系。  </p>
+<p>若视图包含以下任何一项，则视图不可更新：</p>
 <ol>
-<li>不支持事务，不支持外键</li>
-<li>支持表锁，不支持行锁</li>
-<li>访问速度快</li>
+<li>聚合函数或窗口函数（sum(),min(),max(),count()等）</li>
+<li>distinct</li>
+<li>group by</li>
+<li>having</li>
+<li>union或者union all</li>
 </ol>
-<p><strong>文件</strong>：</p>
-<ul>
-<li>xxx.sdi：存储表结构信息</li>
-<li>xxx.MYD：存储数据</li>
-<li>xxx.MYI：存储索引</li>
-</ul>
-<h4 id="Memory"><a href="#Memory" class="headerlink" title="Memory"></a>Memory</h4><p><strong>介绍</strong>：Memory引擎的表数据时存储在内存中，由于受到硬件文件，或断电问题的影响，只能将这些表作为临时表或缓存使用。  </p>
-<p><strong>特点</strong>：</p>
-<ol>
-<li>内存存放</li>
-<li>hash索引（默认）</li>
-</ol>
-<p><strong>文件</strong>：  </p>
-<p>xxx.sdi：存储表结构信息</p>
-<h3 id="选择"><a href="#选择" class="headerlink" title="选择"></a>选择</h3><p>根据应用系统的特点选择合适的存储引擎，对于复杂的应用的系统，可根据实际情况选择多种存储引擎进行组合。</p>
-<ul>
-<li>InnoDB：绝大部分情况下的选择，是mysql的默认存储引擎，支持事务，外键，若应用对事务的完整性有比较高的要求，在并发条件下要求数据的一致性，数据操作除了插入和查询之外，还包括很多的更新，删除操作，那么InnoDB存储引擎是比较合适的选择</li>
-<li>MyISAM：若应用是以读操作和插入操作为主，只有很少的更新和删除操作，并对事务的完整性，并发性要求不是很高，那选择这个存储引擎时非常合适的</li>
-<li>MEMORY：将所有数据保存在内存中，访问速度快，通常用于临时表及缓存。MEMORY的缺陷就是对表的大小有限制，太大的表无法缓存在内存中，而且无法保障数据的安全性。</li>
-</ul>
-<h2 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h2><p>MySQL中的索引（index）是一种数据结构，用于加快数据库的查询操作。索引可以理解为一个快速访问数据的目录，类似于书籍的目录，它可以通过指向存储数据的物理位置，使得数据库的查询操作更加高效和快速。  </p>
-<h3 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h3><p><strong>优点</strong>：</p>
-<ul>
-<li>提高数据检索的效率，降低数据库IO成本</li>
-<li>通过索引对数据进行排序，降低数据排序的成本，降低CPU的消耗</li>
-</ul>
-<p><strong>缺点</strong>：</p>
-<ul>
-<li>索引列也是要占用空间的</li>
-<li>索引降低更新表的速度，例如对表进行增删改时，效率降低</li>
-</ul>
-<h3 id="索引结构"><a href="#索引结构" class="headerlink" title="索引结构"></a>索引结构</h3><p>mysql的索引是在存储引擎层实现的，不同的存储引擎有不同的结构，主要包含以下几种：</p>
-<ul>
-<li>B+Tree索引<ul>
-<li>最常见的索引类型，大部分引擎都支持B+树索引</li>
+<h3 id="视图的作用"><a href="#视图的作用" class="headerlink" title="视图的作用"></a>视图的作用</h3><ul>
+<li>简单<ul>
+<li>视图可简化用户对数据的理解，可简化操作，经常使用的查询可定义为视图，从而使得用户不必为以后的操作每次指定全部的条件</li>
 </ul>
 </li>
-<li>Hash索引<ul>
-<li>底层数据结构是用哈希表实现的，只有精确匹配索引列的查询才有效，不支持范围查询</li>
+<li>安全<ul>
+<li>数据库可以授权，但不能授权到数据库特定行和特定的列上，通过视图用户只能查询和修改他们所能见到的数据</li>
 </ul>
 </li>
-<li>R-tree<ul>
-<li>空间索引是MyISAM引擎的一个特殊索引类型，主要用于地理空间数据类型，通常使用较少</li>
+<li>数据独立<ul>
+<li>视图可帮助用户屏蔽真实表结构带来的影响</li>
 </ul>
 </li>
-<li>Full-text<ul>
-<li>全文索引是一种建立倒排索引，快速匹配文档的方式，类似于Lucene，Solr，ES</li>
-</ul>
-</li>
-</ul>
-<p><strong>引擎对索引的支持情况</strong>：</p>
-<ul>
-<li>B+tree<ul>
-<li>InnoDB：支持</li>
-<li>MyISAM：支持</li>
-<li>Memory：支持</li>
-</ul>
-</li>
-<li>Hash<ul>
-<li>InnoDB：不支持</li>
-<li>MyISAM：不支持</li>
-<li>Memory：支持</li>
-</ul>
-</li>
-<li>R-tree<ul>
-<li>InnoDB：不支持</li>
-<li>MyISAM：支持</li>
-<li>Memory：不支持</li>
-</ul>
-</li>
-<li>Full-text<ul>
-<li>InnoDB：5.6版本之后支持</li>
-<li>MyISAM：支持</li>
-<li>Memory：不支持</li>
-</ul>
-</li>
-</ul>
-<h4 id="BTree"><a href="#BTree" class="headerlink" title="BTree"></a>BTree</h4><p>多路平衡查找树，以一个最大度数（树的度数是一个节点的子节点个数）为5的BTree为例（每个节点最多存储4个key，5个指针）</p>
-<h4 id="B-Tree"><a href="#B-Tree" class="headerlink" title="B+Tree"></a>B+Tree</h4><p>相对于BTree的区别：</p>
-<ul>
-<li>所有数据都会出现在叶子节点</li>
-<li>叶子节点形成一个单链表</li>
-</ul>
-<p>MySQL索引数据结构对经典的B+Tree进行优化，在原B+Tree的基础上，增加一个指向相邻叶子节点的链表指针，就形成了带有顺序指针的B+Tree，提高区间访问的性能。</p>
-<h4 id="Hash"><a href="#Hash" class="headerlink" title="Hash"></a>Hash</h4><p>哈希索引就是采用一定的Hash算法，将键值换算成新的hash值，映射到对应的槽位上，然后存储在hash表中。  </p>
-<p><strong>Hash索引特点</strong>：</p>
-<ol>
-<li>Hash索引只能用于对等标胶（=,in），不支持范围查询（between,&gt;,&lt;,…）</li>
-<li>无法利用索引完成排序操作</li>
-<li>查询效率高，通常只需要一次检索就可以了（若是出现哈希碰撞，便不止一次），效率通常要高于B+Tree索引</li>
-</ol>
-<p><strong>存储引擎支持</strong>：在mysql中，支持hash索引的是Memory引擎，而InnoDB具有自适应的hash功能，hash索引是存储引擎根据B+Tree索引在指定条件下自动构建的。 </p>
-<p><strong>InnoDB选择B+tree索引原因</strong>：</p>
-<ul>
-<li>相对于二叉树，层级更少，搜索效率高</li>
-<li>相对图BTree，无论是叶子节点或是非叶子节点，都会保存数据，这样导致一页中存储的键值减少，指针跟着减少，要同样保存大量数据，只能增加树的高度，导致性能降低</li>
-<li>相对Hash索引，B+Tree支持范围匹配及排序操作</li>
-</ul>
-<h3 id="索引分类"><a href="#索引分类" class="headerlink" title="索引分类"></a>索引分类</h3><ul>
-<li><strong>主键索引</strong>：针对于表中主键创建的索引。默认自动创建，只能有一个，关键字primary</li>
-<li><strong>唯一索引</strong>：避免同一个表中某数据列中的值重复，可有多个，关键字unique</li>
-<li><strong>常规索引</strong>：快速定位特定数据，可有多个</li>
-<li><strong>全文索引</strong>：全文索引查找的是文本中的关键字，而不是比较索引的值，可以有多个，fulltext</li>
-</ul>
-<p>在InnoDB存储索引中，根据索引的存储形式，又可分为以下两种：</p>
-<ul>
-<li><strong>聚集索引</strong>：将数据存储与索引放到一块，索引结构的叶子节点保存了行数据，必须有，且只有一个</li>
-<li><strong>二级索引</strong>：将数据与索引分开存储，索引结构的叶子节点关联的是对应的主键，可以存在多个</li>
-</ul>
-<h3 id="索引语法"><a href="#索引语法" class="headerlink" title="索引语法"></a>索引语法</h3><p><strong>创建索引</strong>：  </p>
-<p>create [unique|fulltext] index 索引名 on 表名（字段1,字段2…）  </p>
-<p><strong>查看索引</strong>：  </p>
-<p>show index from 表名  </p>
-<p><strong>删除索引</strong>：  </p>
-<p>drop index 索引名 on 表名  </p>
-<h3 id="SQL性能分析"><a href="#SQL性能分析" class="headerlink" title="SQL性能分析"></a>SQL性能分析</h3><h4 id="查看执行频次"><a href="#查看执行频次" class="headerlink" title="查看执行频次"></a>查看执行频次</h4><p>查看当前数据库的insert，delete，update，select访问频次：  </p>
-<p>show global status like ‘Com七个下划线’;  </p>
-<h4 id="慢查询日志"><a href="#慢查询日志" class="headerlink" title="慢查询日志"></a>慢查询日志</h4><p>慢查询日志记录所有执行时间超过指定参数（long_query_time，单位秒，默认10秒）的所有SQL语句的日志。  </p>
-<p>mysql的慢查询日志默认没有开启(可用该语句查询是否开启：show variables like ‘slow_query_log’)，需在mysql的配置文件（/etc/my.cnf）中配置如下信息：  </p>
-<ul>
-<li>开启MySQL慢日志查询开关<ul>
-<li>slow_query_log=1</li>
-</ul>
-</li>
-<li>设置慢日志的时间为2秒，sql语句执行时间超过2秒，就会视为慢查询，记录慢查询日志<ul>
-<li>long_query_time=2</li>
-</ul>
-</li>
-</ul>
-<p>配置完毕之后，通过以下执行重新启动mysql服务器进行测试，查看慢日志文件中记录的信息/var/lib/mysql/localhost-slow.log</p>
-<h4 id="profile"><a href="#profile" class="headerlink" title="profile"></a>profile</h4><ul>
-<li>show profiles能够在sql优化时帮助我们了解时间都耗费到哪里去了，通过have_profiling参数，都能够看到当前mysql是否支持profile操作：  <ul>
-<li>select @@have_profiling; </li>
-</ul>
-</li>
-<li>默认profiling是关闭的（可用该指令查询：select @@profiling），可以通过set语句在session/global级别开启profiling：  <ul>
-<li>set profiling=1;  </li>
-</ul>
-</li>
-<li>查看每一条sql的耗时基本情况<ul>
-<li>show profiles;</li>
-</ul>
-</li>
-<li>查看指定query_id的sql语句各个阶段的耗时情况<ul>
-<li>show profile for query query_id</li>
-</ul>
-</li>
-<li>查看指定query_id的sql语句CPU的使用情况<ul>
-<li>show profile cpu for query query_id;</li>
-</ul>
-</li>
-</ul>
-<h4 id="explain执行计划"><a href="#explain执行计划" class="headerlink" title="explain执行计划"></a>explain执行计划</h4><p>explain或desc命令获取mysql如何执行select语句的信息，包括select语句执行过程中表如何连接和连接的顺序。  </p>
-<p><strong>语法</strong>：  </p>
-<p>explain select 字段列表 from 表名 where 条件;  </p>
-<p><strong>explain执行计划各字段含义</strong>：</p>
-<ul>
-<li>id<ul>
-<li>select查询的序列号，表示查询中执行select子句或是操作表的顺序（id相同，执行顺序从上到下;id不同，值越大，越先执行）</li>
-</ul>
-</li>
-<li>select_type<ul>
-<li>表示select的类型，常见的取值有simple（简单表，即不使用表连接或子查询），primary（主查询，即外层的查询），union（union中的第二个或后面的查询语句），subquery（select/where之后包含子查询）等</li>
-</ul>
-</li>
-<li>type<ul>
-<li>表示连接类型，性能由好到差的连接类型为null，system，const，eq_ref，ref，range，index，all</li>
-</ul>
-</li>
-<li>possible_key<ul>
-<li>显示可能应用在这张表上的索引，一个或多个</li>
-</ul>
-</li>
-<li>key<ul>
-<li>实际使用的索引，若为null，则没有使用索引</li>
-</ul>
-</li>
-<li>key_len<ul>
-<li>表示索引中使用的字节数，该值为索引字段的最大可能长度，而非实际使用长度，在不损失精确性的前提下，长度越短越好</li>
-</ul>
-</li>
-<li>rows<ul>
-<li>mysql认为必须要执行查询的行数，在innodb引擎的表中，是一个估计值，可能并不总是准确的</li>
-</ul>
-</li>
-<li>filtered<ul>
-<li>表示返回结果的行数需读取行的百分比，filtered的值越大越好</li>
-</ul>
-</li>
-</ul>
-<h3 id="索引使用"><a href="#索引使用" class="headerlink" title="索引使用"></a>索引使用</h3><p><strong>最左前缀法则</strong>：  </p>
-<p>若索引多列（联合索引），要遵守最左前缀法则。最左前缀法则指的是查询从索引的最左列开始，且不跳过索引中的列。  </p>
-<p>若跳过某一列，索引将部分失效（后面的字段索引失效）  </p>
-<p><strong>范围查询</strong>：  </p>
-<p>联合索引中，出现范围查询（&gt;，&lt;）范围查询右侧的列索引失效。  </p>
-<p><strong>索引列运算</strong>：  </p>
-<p>不要在索引列上进行运算操作，索引将失效。  </p>
-<p><strong>字符串不加引号</strong>：  </p>
-<p>字符串类型字段使用时，不加引号，索引将失效。  </p>
-<p><strong>模糊查询</strong>：  </p>
-<p>若仅仅是尾部模糊匹配，索引不会失效，若是头部模糊匹配，索引失效。  </p>
-<p><strong>or连接的条件</strong>：  </p>
-<p>用or分割开的条件，若or前的条件中的列有索引，而后面的列中无索引，那涉及的索引都不会被用到。  </p>
-<p><strong>数据分布影响</strong>：  </p>
-<p>若mysql评估使用索引比全表更慢，则不使用索引。  </p>
-<p><strong>SQL提示</strong>：  </p>
-<p>是优化数据库的一个重要手段，就是在sql语句中加入一些人为的提示来达到优化操作的目的。  </p>
-<ul>
-<li><p>use index();  </p>
-<ul>
-<li>建议数据库用某个索引</li>
-<li>explain select * from tb_user use index(tb_pro) where profession=”软件工程”;</li>
-</ul>
-</li>
-<li><p>ignore index();  </p>
-<ul>
-<li>使数据库忽视某个索引</li>
-<li>explain select * from tb_user ignore index(tb_pro) where profession=”软件工程”;</li>
-</ul>
-</li>
-<li><p>force index();  </p>
-<ul>
-<li>强迫数据库用某个索引</li>
-<li>explain select * from tb_user force index(tb_pro) where profession=”软件工程”;</li>
-</ul>
-</li>
-</ul>
-<p><strong>覆盖索引</strong>：  </p>
-<p>尽量使用覆盖索引（查询使用了索引，并需要返回的列，在该索引中已经全部能够找到），减少select *  </p>
-<ul>
-<li>using index condition<ul>
-<li>查找使用了索引，但需要回表查询数据</li>
-</ul>
-</li>
-<li>using where;using index<ul>
-<li>查找使用了索引，但是需要的数据都在索引列中能找到，所以不需要回表查询数据</li>
-</ul>
-</li>
-</ul>
-<p><strong>前缀索引</strong>：  </p>
-<p>当字段类型为字符串（varchar，text等）时，有时需要索引很长的字符串，这会让索引变得很大，查询时，浪费大量的磁盘IO，影响查询效率，此时可以只将字符串的一部分前缀，建立索引，可节约索引空间，从而提高索引效率。  </p>
-<p><strong>语法</strong>：create index idx_xxxx on table_name(字段(n));  </p>
-<p><strong>选择性</strong>是指不重复的索引值（基数）和数据表的记录总数的比值。</p>
-<p><strong>前缀长度</strong>可根据索引的选择性来决定。 索引选择性越高则查询效率越高，唯一索引的选择性是1.是最好的索引选择性，性能也是最好的。  </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select count(distinct email)&#x2F;count(*) from tb_user;  </span><br><span class="line"></span><br><span class="line">select count(distinct substring(email,1,5))&#x2F;count(*) from tb_user;</span><br></pre></td></tr></table></figure>
-<p><strong>单列索引与联合索引</strong>：  </p>
-<ul>
-<li>单列索引即一个索引只包含单个列</li>
-<li>联合索引即一个索引包含了多个列</li>
-<li>在业务场景中，若存在多个查询条件，考虑针对于查询字段建立索引时，建议建立联合索引，而非单列索引</li>
-</ul>
-<p>多条件联合查询时，mysql优化器会评估哪个字段的索引效率更高，会选择该索引完成本次查询。  </p>
-<h3 id="索引设计原则"><a href="#索引设计原则" class="headerlink" title="索引设计原则"></a>索引设计原则</h3><ul>
-<li>针对于数据量较大,且查询比较频繁的表建立索引。</li>
-<li>针对于常作为查询条件(where)、排序(order by)、分组(group by)操作的字段建立索引。</li>
-<li>尽量选择区分度高的列作为索引，尽量建立唯一索引，区分度越高，使用索引的效率越高。</li>
-<li>若是字符串类型的字段，字段的长度较长，可以针对于字段的特点，建立前缀索引。</li>
-<li>尽量使用联合索引，减少单列索引,查询时，联合索引很多时候可以覆盖索引，节省存储空间，避免回表，提高查询效率。</li>
-<li>要控制索引的数量,索引并不是多多益善,索引越多,雄护索引结构的代价也就越大,会影响增删改的效率。</li>
-<li>若索引列不能存储NULL值,请在创建表时使用NOT NULL约束它。当优化器知道每列是否包含NULL值时,它可以更好地确定哪个索引最有效地用于查询。</li>
 </ul>
 
                 
@@ -789,7 +608,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://example.com/2023/08/06/mysql3/">http://example.com/2023/08/06/mysql3/</a>
+                    <a href="http://example.com/2023/08/07/mysql4/">http://example.com/2023/08/07/mysql4/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -999,7 +818,7 @@
         repo: 'contact.github.io',
         owner: 'th-gs',
         admin: ["th-gs"],
-        id: '2023-08-06T22-29-34',
+        id: '2023-08-07T21-56-11',
         distractionFreeMode: false  // Facebook-like distraction free mode
     });
 
@@ -1025,9 +844,10 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
+                <i class="far fa-dot-circle"></i>&nbsp;Current
+            </div>
             <div class="card">
                 <a href="/2023/08/07/mysql4/">
                     <div class="card-image">
@@ -1045,9 +865,9 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2023-08-07
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-08-07
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -1060,6 +880,7 @@
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -1078,24 +899,24 @@
                 Next&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2023/08/02/mysql2/">
+                <a href="/2023/08/06/mysql3/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/loading.gif" data-original="/medias/featureimages/1.jpg" class="responsive-img" alt="MySQL基础（二）">
+                        <img src="/medias/loading.gif" data-original="/medias/featureimages/1.jpg" class="responsive-img" alt="存储引擎和索引（三）">
                         
-                        <span class="card-title">MySQL基础（二）</span>
+                        <span class="card-title">存储引擎和索引（三）</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            MySQL基础
+                            存储引擎和索引
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2023-08-02
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-08-06
                             </span>
                         <span class="publish-author">
                             
