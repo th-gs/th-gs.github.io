@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="登录（六）, ljs&#39;s blog">
+    <meta name="keywords" content="日志和主从复制（七）, ljs&#39;s blog">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>登录（六） | ljs&#39;s blog</title>
+    <title>日志和主从复制（七） | ljs&#39;s blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -289,12 +289,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/4.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/1.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">登录（六）</h1>
+                    <h1 class="description center-align post-title">日志和主从复制（七）</h1>
                 </div>
             </div>
         </div>
@@ -410,8 +410,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/JavaWeb/">
-                                <span class="chip bg-color">JavaWeb</span>
+                            <a href="/tags/MySQL/">
+                                <span class="chip bg-color">MySQL</span>
                             </a>
                         
                     </div>
@@ -435,7 +435,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
-                    2023-07-26
+                    2023-08-22
                 </div>
                 
 
@@ -444,7 +444,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    1.5k
+                    1.6k
                 </div>
                 
 
@@ -466,148 +466,121 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="登录（六）"><a href="#登录（六）" class="headerlink" title="登录（六）"></a>登录（六）</h1><h2 id="会话技术"><a href="#会话技术" class="headerlink" title="会话技术"></a>会话技术</h2><p><strong>会话</strong>：用户打开浏览器，访问web服务器的资源，会话建立，直到有一方断开连接，会话结束，在一次会话中可以包含多次请求和响应。  </p>
-<p><strong>会话跟踪</strong>：一种维护浏览器状态的方法，服务器需识别多次请求是否来自同一浏览器，以便在同一次会话的多次请求见共享数据。  </p>
-<p><strong>会话跟踪方案</strong>：</p>
-<ul>
-<li>客户端会话跟踪技术：Cookie</li>
-<li>服务端会话跟踪技术：Session</li>
-<li>令牌技术</li>
-</ul>
-<h3 id="Cookie"><a href="#Cookie" class="headerlink" title="Cookie"></a>Cookie</h3><p><strong>优点</strong>：http协议中支持的技术。  </p>
-<p><strong>缺点</strong>：</p>
-<ul>
-<li>移动端APP无法使用Cookie</li>
-<li>不安全，用户可以自己禁用Cookie</li>
-<li>Cookie不能跨域</li>
-</ul>
-<h3 id="Session"><a href="#Session" class="headerlink" title="Session"></a>Session</h3><p><strong>优点</strong>：存储在服务器，安全。  </p>
-<p><strong>缺点</strong>：</p>
-<ul>
-<li>服务器集群环境下无法直接使用Session</li>
-<li>Cookie的缺点</li>
-</ul>
-<h3 id="令牌技术"><a href="#令牌技术" class="headerlink" title="令牌技术"></a>令牌技术</h3><p><strong>优点</strong>：</p>
-<ul>
-<li>支持PC，移动端</li>
-<li>解决集群环境下的认证问题</li>
-<li>减轻服务器端存储压力</li>
-</ul>
-<p><strong>缺点</strong>：需自己实现</p>
-<h2 id="JWT"><a href="#JWT" class="headerlink" title="JWT"></a>JWT</h2><p><strong>JWT</strong>全程JSON Web Token。  </p>
-<p>定义一组简洁的，自包含的格式，用于在通信双方以JSON数据格式安全的传递信息。由于数据签名的存在，这些信息是可靠的。  </p>
-<p><strong>组成</strong>：</p>
+                <h1 id="日志和主从复制"><a href="#日志和主从复制" class="headerlink" title="日志和主从复制"></a>日志和主从复制</h1><h2 id="日志"><a href="#日志" class="headerlink" title="日志"></a>日志</h2><h3 id="错误日志"><a href="#错误日志" class="headerlink" title="错误日志"></a>错误日志</h3><p>错误日志是mysql中最重要的日志之一，记录当mysqld启动或停止时，以及服务器在运行过程中发生任何严重错误时的相关信息。当数据库出现任何故障导致无法正常使用时，建议首先查看此日志。  </p>
+<p>该日志默认开启，默认存在目录/var/log，默认日志文件为mysql.log。  </p>
+<p>查看日志位置：  </p>
+<p>show variables like ‘%log_error%</p>
+<h3 id="二进制日志"><a href="#二进制日志" class="headerlink" title="二进制日志"></a>二进制日志</h3><p>二进制日志（BINLOG）记录所有DDL（数据定义语言）语句和DML（数据操纵语言）语句，但不包括数据查询（select，show）语句。  </p>
+<p><strong>作用</strong>：</p>
 <ol>
-<li>Header（头），记录令牌类型，签名算法。</li>
-<li>Payload（有效荷载）：携带一些自定义信息，默认信息等。</li>
-<li>Signature（签名），防止Token被篡改，确保安全性，将header，payload，并加入指定秘钥，通过指定签名算法计算而来。</li>
-</ol>
-<p><strong>使用场景</strong>：登录认证</p>
-<h3 id="登录认证"><a href="#登录认证" class="headerlink" title="登录认证"></a>登录认证</h3><ol>
-<li>登录成功后，生成令牌。</li>
-<li>后续每个请求，都要携带JWT令牌，系统在每次请求处理之前，先校验令牌，通过后，再处理</li>
-</ol>
-<h3 id="依赖"><a href="#依赖" class="headerlink" title="依赖"></a>依赖</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;io.jsonwebtoken&lt;&#x2F;groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;jjwt&lt;&#x2F;artifactId&gt;</span><br><span class="line">            &lt;version&gt;0.9.1&lt;&#x2F;version&gt;</span><br><span class="line">&lt;&#x2F;dependency&gt;</span><br></pre></td></tr></table></figure>
-<h3 id="生成和校验"><a href="#生成和校验" class="headerlink" title="生成和校验"></a>生成和校验</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"> &#x2F;&#x2F;生成</span><br><span class="line">@Test</span><br><span class="line">void jwtGenerate()&#123;</span><br><span class="line">    Map&lt;String,Object&gt; map&#x3D;new HashMap&lt;&gt;();</span><br><span class="line">    map.put(&quot;a&quot;,1);</span><br><span class="line">    map.put(&quot;b&quot;,2);</span><br><span class="line">    String ljsblog &#x3D; Jwts.builder()</span><br><span class="line">            .setClaims(map)</span><br><span class="line">            .signWith(SignatureAlgorithm.HS256, &quot;ljsblog&quot;)</span><br><span class="line">            .setExpiration(new Date(System.currentTimeMillis()+1000*3600*12))</span><br><span class="line">            .compact();</span><br><span class="line">    System.out.println(ljsblog);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;校验</span><br><span class="line">@Test</span><br><span class="line">void jwtCertify()&#123;</span><br><span class="line">    Claims ljsblog &#x3D; Jwts.parser()</span><br><span class="line">            .setSigningKey(&quot;ljsblog&quot;)</span><br><span class="line">            .parseClaimsJws(&quot;eyJhbGciOiJIUzI1NiJ9.eyJhIjoxLCJiIjoyLCJleHAiOjE2ODQzNTc4NzV9.jr-x-QlFpVgt44kc-8Mfyduzd_m10jb7pwhyxPtYfwQ&quot;)</span><br><span class="line">            .getBody();</span><br><span class="line">    System.out.println(ljsblog);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><strong>注</strong>：</p>
-<ol>
-<li>JWT校验时使用的签名秘钥，必须和生成JWT令牌时使用的秘钥配套</li>
-<li>若JWT令牌解析校验时报错，则说明JWT令牌被纂改或失效，令牌非法</li>
-</ol>
-<h2 id="Filter过滤器"><a href="#Filter过滤器" class="headerlink" title="Filter过滤器"></a>Filter过滤器</h2><p><strong>Filter过滤器</strong>：是Javaweb三大组件（Servlet,Filter,Listener）之一。  </p>
-<p>过滤器可把资源的请求拦截下来，从而实现一些特殊功能。  </p>
-<p>过滤器一般完成一些通用操作，比如：登录校验，统一编码处理，敏感字符处理等。  </p>
-<h3 id="Filter快速入门"><a href="#Filter快速入门" class="headerlink" title="Filter快速入门"></a>Filter快速入门</h3><ol>
-<li>定义Filter<ul>
-<li>定义一个类，实现Filter接口，并重写其所有方法</li>
-</ul>
-</li>
-<li>配置Filter<ul>
-<li>Filter类加@WebFilter注解，配置拦截资源的路径，引导类加上@ServletComponentScan开启Servlet组建支持。</li>
+<li>数据恢复</li>
+<li>mysql的主从复制，在mysql8版本中，默认二进制日志开启。<ul>
+<li>show variables like ‘%log_bin%’</li>
 </ul>
 </li>
 </ol>
-<p><strong>例</strong>：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">package com.ljsblog.file;</span><br><span class="line"></span><br><span class="line">import javax.servlet.*;</span><br><span class="line">import javax.servlet.annotation.WebFilter;</span><br><span class="line">import java.io.IOException;</span><br><span class="line">@WebFilter(urlPatterns &#x3D; &quot;&#x2F;*&quot;)</span><br><span class="line">public class DemoFilter implements Filter &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void init(FilterConfig filterConfig) throws ServletException &#123;</span><br><span class="line">        Filter.super.init(filterConfig);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException &#123;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void destroy() &#123;</span><br><span class="line">        Filter.super.destroy();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">package com.ljsblog;</span><br><span class="line"></span><br><span class="line">import org.springframework.boot.SpringApplication;</span><br><span class="line">import org.springframework.boot.autoconfigure.SpringBootApplication;</span><br><span class="line">import org.springframework.boot.web.servlet.ServletComponentScan;</span><br><span class="line"></span><br><span class="line">@ServletComponentScan</span><br><span class="line">@SpringBootApplication</span><br><span class="line">public class TliasWebManagmentApplication &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        SpringApplication.run(TliasWebManagmentApplication.class, args);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="Filter拦截路径"><a href="#Filter拦截路径" class="headerlink" title="Filter拦截路径"></a>Filter拦截路径</h3><ul>
-<li>拦截具体路径<ul>
-<li>urlPatterns值：/路径名</li>
-<li>只有访问/路径名时，才会被拦截</li>
-</ul>
-</li>
-<li>目录拦截<ul>
-<li>urlPatterns值：/路径名/*</li>
-<li>访问/路径名下的所有资源，都会被拦截</li>
-</ul>
-</li>
-<li>拦截所有<ul>
-<li>urlPatterns值：/*</li>
-<li>访问所有资源，都会被拦截</li>
-</ul>
-</li>
-</ul>
-<h3 id="执行流程"><a href="#执行流程" class="headerlink" title="执行流程"></a>执行流程</h3><ol>
-<li>请求</li>
-<li>放行前逻辑</li>
-<li>放行</li>
-<li>资源</li>
-<li>放行后逻辑</li>
-</ol>
-<h3 id="过滤器链"><a href="#过滤器链" class="headerlink" title="过滤器链"></a>过滤器链</h3><p>一个web应用中，配置多个过滤器，就形成一个过滤器链  </p>
-<p><strong>顺序</strong>：注解配置的Filter，优先级是按照过滤器类名（字符串）的自然排序</p>
-<h3 id="登录校验filter"><a href="#登录校验filter" class="headerlink" title="登录校验filter"></a>登录校验filter</h3><p><strong>注</strong>：</p>
-<ol>
-<li>除了登录请求，其余请求拦截到都需要校验令牌</li>
-<li>拦截到请求后，有令牌且令牌校验通过（合法）才可以放行，否则都会返回登录错误结果</li>
-</ol>
-<p><strong>流程</strong>：</p>
-<ol>
-<li>获取请求url</li>
-<li>判断请求url中是否包含login，若包含，说明是登录操作，放行。 </li>
-<li>获取请求头中的令牌（token）</li>
-<li>判断令牌时否存在，若不存在，返回错误结果（未登录）</li>
-<li>解析token，若解析失败，返回错误结果（未登录）</li>
-<li>放行</li>
-</ol>
-<h2 id="拦截器"><a href="#拦截器" class="headerlink" title="拦截器"></a>拦截器</h2><p><strong>拦截器</strong>是一种动态拦截方法调用的机制，类似于过滤器，Spring框架中提供的，用来动态拦截控制器方法的执行，可用来拦截请求，在指定的方法调用前后，根据业务需要执行预先设定的代码。  </p>
-<h3 id="Interceptor快速入门"><a href="#Interceptor快速入门" class="headerlink" title="Interceptor快速入门"></a>Interceptor快速入门</h3><ol>
-<li>定义拦截器，实现HandlerInterceptor接口，并重写其所有方法</li>
-<li>注册拦截器</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">@Component</span><br><span class="line">public class CheckInterceptor implements HandlerInterceptor &#123;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception &#123;</span><br><span class="line">        System.out.println(&quot;preHandle&quot;);</span><br><span class="line">        return true;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception &#123;</span><br><span class="line">        System.out.println(&quot;postHandle&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception &#123;</span><br><span class="line">        System.out.println(&quot;afterCompletion&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">@Configuration</span><br><span class="line">public class WebConfig implements WebMvcConfigurer&#123;</span><br><span class="line">    @Autowired</span><br><span class="line">    private CheckInterceptor checkInterceptor;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void addInterceptors(InterceptorRegistry registry) &#123;</span><br><span class="line">        registry.addInterceptor(checkInterceptor).addPathPatterns(&quot;&#x2F;**&quot;).excludePathPatterns(&quot;&#x2F;login&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h3 id="拦截路径"><a href="#拦截路径" class="headerlink" title="拦截路径"></a>拦截路径</h3><p>addPathPatterns：需要拦截的资源。  </p>
-<p>excludePathPatterns：不需要拦截的资源。  </p>
+<h4 id="日志格式"><a href="#日志格式" class="headerlink" title="日志格式"></a>日志格式</h4><p>mysql服务器中提供多种格式记录二进制日志。  </p>
+<p><strong>日志格式</strong>：</p>
 <ul>
-<li>拦截路径：/*<ul>
-<li>一级路径</li>
+<li>statement：基于sql语句的日志记录，记录的是sql语句，对数据进行修改的sql都会记录在日志文件中。</li>
+<li>row：基于行的日志记录，记录的是每一行的数据变更（默认）</li>
+<li>mixed：混合statement和row两种格式，默认采用statement，在某些特殊情况下会自动切换为row进行记录</li>
+</ul>
+<p>show variables like ‘%binlog_format%’;  </p>
+<h4 id="日志删除"><a href="#日志删除" class="headerlink" title="日志删除"></a>日志删除</h4><p>对比较繁忙的业务系统，每天生成的binlog数据巨大，若长时间不清除，将占用大量磁盘空间。  </p>
+<p><strong>可通过以下几种方式清理日志</strong>：</p>
+<ul>
+<li>reset master<ul>
+<li>删除全部binlog日志，删除之后，日志编号，将从binlog.000001重新开始</li>
 </ul>
 </li>
-<li>拦截路径：/**<ul>
-<li>任意级路径</li>
+<li>purge master logs to ‘binlog.*’<ul>
+<li>删除*编号之前的所有日志</li>
 </ul>
 </li>
-<li>拦截路径：/路径名/*<ul>
-<li>/路径名 下的一级路径</li>
-</ul>
-</li>
-<li>拦截路径：/路径名/**<ul>
-<li>/路径名 下的任意级路径</li>
-</ul>
-</li>
-</ul>
-<h2 id="Filter和Interceptor的区别"><a href="#Filter和Interceptor的区别" class="headerlink" title="Filter和Interceptor的区别"></a>Filter和Interceptor的区别</h2><ul>
-<li>接口规范不同<ul>
-<li>过滤器需要实现Filter接口</li>
-<li>拦截器需要实现HandlerInterceptor接口</li>
-</ul>
-</li>
-<li>拦截范围不同<ul>
-<li>过滤器会拦截所有资源</li>
-<li>拦截器只拦截Spring环境中的资源</li>
+<li>purge master logs before ‘yyyy-mm-dd hh24:mi:ss’<ul>
+<li>删除日志为“yyyy-mm-dd hh24:mi:ss”之前产生的所有日志</li>
 </ul>
 </li>
 </ul>
-<h2 id="全局异常处理器"><a href="#全局异常处理器" class="headerlink" title="全局异常处理器"></a>全局异常处理器</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">@RestControllerAdvice</span><br><span class="line">public class GlobalExceptionHandler &#123;</span><br><span class="line">    @ExceptionHandler(Exception.class)</span><br><span class="line">    public Result ex(Exception ex)&#123;</span><br><span class="line">        ex.printStackTrace();</span><br><span class="line">        return Result.error(&quot;操作失败，请联系管理员&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>也可在mysql的配置文件中配置二进制日志的过期时间，设置之后，二进制日志过期会自动删除：  </p>
+<p>show variables like ‘%binlog_expire_logs_seconds%’;  </p>
+<h3 id="查询日志"><a href="#查询日志" class="headerlink" title="查询日志"></a>查询日志</h3><p>查询日志中记录客户端的所有操作语句，而二进制日志不包含查询数据的sql语句，默认情况下，查询日志是未开启的。若需开启查询日志，可修改mysql的配置文件/etc/my.cnf文件，添加如下内容：  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">general_log&#x3D;1</span><br><span class="line">general_log_file&#x3D;mysql_query.log</span><br></pre></td></tr></table></figure>
+<h3 id="慢查询日志"><a href="#慢查询日志" class="headerlink" title="慢查询日志"></a>慢查询日志</h3><p>慢查询日志记录了所有执行时间超过参数long_query_time设置值并且扫描记录数不小于min_examined_row_limit的所有的SQL语句的日志,默认未开启。long_query_time默认为 10 秒,最小为0,精度可以到微秒。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#慢查询日志</span><br><span class="line">slow_query_log&#x3D;1</span><br><span class="line">#执行时间参数</span><br><span class="line">long_query_time&#x3D;2</span><br></pre></td></tr></table></figure>
+<p>默认情况下，不会记录管理语句，也不会记录不使用索引进行查找的查询。可以使用log_slow_admin_statements和更改此行为log_queries_not_using_indexes。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#记录执行较慢的管理语句</span><br><span class="line">log_slow_admin_statements&#x3D;1</span><br><span class="line">#记录执行较慢的未使用索引的语句</span><br><span class="line">log_queries_not_using_indexes&#x3D;1</span><br></pre></td></tr></table></figure>
+<h2 id="主从复制"><a href="#主从复制" class="headerlink" title="主从复制"></a>主从复制</h2><p>主从复制是将主数据库的DDL和DML操作通过二进制日志传到从库服务器中，然后在从库上对这些日志重写执行（也叫重做），从而使得从库和主库的数据保持同步。  </p>
+<p>mysql支持一台主库同时向多台从库进行复制，从库同时也可作为其他从服务器的主库，实现链状复制。  </p>
+<p>MYSQL复制的有点主要包含以下三个方面：</p>
+<ol>
+<li>主库出现问题，可迅速切换到从库提供服务</li>
+<li>实现读写分离，降低主库的访问压力</li>
+<li>可在从库中执行备份，以避免备份期间影响主库服务</li>
+</ol>
+<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>复制的步骤：</p>
+<ol>
+<li>Master主库在事务提交时，会把数据变更记录写在二进制日志文件binlog中</li>
+<li>从库读取主库的二进制日志文件binlog，写入到从库的中继日志relay log</li>
+<li>slave重做中继日志中的事件，将改变反应它自己的数据</li>
+</ol>
+<h3 id="范例"><a href="#范例" class="headerlink" title="范例"></a>范例</h3><p>先关闭主库服务器和从库服务器的防火墙</p>
+<h4 id="主库配置"><a href="#主库配置" class="headerlink" title="主库配置"></a>主库配置</h4><ol>
+<li>修改配置文件 /etc/my.cnf</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#mysql 服务ID，保证整个集群环境中唯一，取值范围：1 – 232-1，默认为1</span><br><span class="line">server-id&#x3D;1</span><br><span class="line">#是否只读,1 代表只读, 0 代表读写</span><br><span class="line">read-only&#x3D;0</span><br><span class="line">#忽略的数据, 指不需要同步的数据库</span><br><span class="line">#binlog-ignore-db&#x3D;mysql</span><br><span class="line">#指定同步的数据库</span><br><span class="line">#binlog-do-db&#x3D;db01</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>重启mysql服务器</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl restart mysqld</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>登录mysql，创建远程连接的账号，并授予主从复制权限</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#创建username用户，并设置密码，该用户可在任意主机连接该MySQL服务</span><br><span class="line">CREATE USER &#39;username&#39;@&#39;%&#39; IDENTIFIED WITH mysql_native_password BY &#39;Root@123456&#39;;</span><br><span class="line">#为 &#39;username&#39;@&#39;%&#39; 用户分配主从复制权限</span><br><span class="line">GRANT REPLICATION SLAVE ON *.* TO &#39;username&#39;@&#39;%&#39;;</span><br></pre></td></tr></table></figure>
+<ol start="4">
+<li>通过指令，查看二进制日志坐标，字段含义如下<ul>
+<li>file：从哪个日志文件开始推送日志文件</li>
+<li>position：从哪个位置开始推送日志</li>
+<li>binlog_ignore_db：指定不需要同步的数据库</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show master status;</span><br></pre></td></tr></table></figure>
+<h4 id="从库配置"><a href="#从库配置" class="headerlink" title="从库配置"></a>从库配置</h4><ol>
+<li>修改配置文件/etc/my.cnf</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#mysql 服务ID，保证整个集群环境中唯一，取值范围：1 – 2^32-1，和主库不一样即可</span><br><span class="line">server-id&#x3D;2</span><br><span class="line">#是否只读,1 代表只读, 0 代表读写</span><br><span class="line">read-only&#x3D;1</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>重新启动mysql服务</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl restart mysqld</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>登录mysql，设置主库配置<ul>
+<li>source_host:主库ip</li>
+<li>source_user:连接主库的用户名</li>
+<li>source_password:连接主库的密码</li>
+<li>source_log_file:binlog日志文件名</li>
+<li>source_log_pos:binlog日志文件位置</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CHANGE MASTER TO MASTER_HOST&#x3D;&#39;主库Ip&#39;, MASTER_USER&#x3D;&#39;连接主库的用户名&#39;,</span><br><span class="line">MASTER_PASSWORD&#x3D;&#39;连接主库的密码&#39;, MASTER_LOG_FILE&#x3D;&#39;binlog日志文件名&#39;,</span><br><span class="line">MASTER_LOG_POS&#x3D;binlog日志文件位置</span><br></pre></td></tr></table></figure>
+<ol start="4">
+<li>开启同步操作</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">start replica ; #8.0.22之后</span><br><span class="line">start slave ; #8.0.22之前</span><br></pre></td></tr></table></figure>
+<ol start="5">
+<li>查看主从同步状态</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">show replica status ; #8.0.22之后</span><br><span class="line">show slave status ; #8.0.22之前</span><br></pre></td></tr></table></figure>
+<h4 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h4><ol>
+<li>在主库192.168.19.131上创建数据，并插入数据</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">create database db01;</span><br><span class="line">use db01;</span><br><span class="line">create table tb_user(</span><br><span class="line">id int(11) primary key not null auto_increment,</span><br><span class="line">name varchar(50) not null,</span><br><span class="line">sex varchar(1)</span><br><span class="line">)engine&#x3D;innodb default charset&#x3D;utf8mb4;</span><br><span class="line">insert into tb_user(id,name,sex) values(null,&#39;Tom&#39;, &#39;1&#39;),(null,&#39;Trigger&#39;,&#39;0&#39;),</span><br><span class="line">(null,&#39;Dawn&#39;,&#39;1&#39;);</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>在从库192.168.19.132中查询数据，验证主从是否同步</li>
+</ol>
 
                 
             </div>
@@ -634,7 +607,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://example.com/2023/07/26/jw6/">http://example.com/2023/07/26/jw6/</a>
+                    <a href="http://example.com/2023/08/22/mysql7/">http://example.com/2023/08/22/mysql7/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -672,8 +645,8 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/JavaWeb/">
-                                    <span class="chip bg-color">JavaWeb</span>
+                                <a href="/tags/MySQL/">
+                                    <span class="chip bg-color">MySQL</span>
                                 </a>
                             
                         </div>
@@ -844,7 +817,7 @@
         repo: 'contact.github.io',
         owner: 'th-gs',
         admin: ["th-gs"],
-        id: '2023-07-26T13-57-50',
+        id: '2023-08-22T21-14-24',
         distractionFreeMode: false  // Facebook-like distraction free mode
     });
 
@@ -870,29 +843,30 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
+                <i class="far fa-dot-circle"></i>&nbsp;Current
+            </div>
             <div class="card">
-                <a href="/2023/07/27/jw7/">
+                <a href="/2023/08/22/mysql7/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/loading.gif" data-original="/medias/featureimages/0.jpg" class="responsive-img" alt="AOP（七）">
+                        <img src="/medias/loading.gif" data-original="/medias/featureimages/1.jpg" class="responsive-img" alt="日志和主从复制（七）">
                         
-                        <span class="card-title">AOP（七）</span>
+                        <span class="card-title">日志和主从复制（七）</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            AOP
+                            日志和主从复制
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2023-07-27
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-08-22
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -905,11 +879,12 @@
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/JavaWeb/">
-                        <span class="chip bg-color">JavaWeb</span>
+                    <a href="/tags/MySQL/">
+                        <span class="chip bg-color">MySQL</span>
                     </a>
                     
                 </div>
@@ -923,24 +898,24 @@
                 Next&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2023/05/11/jw5/">
+                <a href="/2023/08/19/mysql6/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/loading.gif" data-original="/medias/featureimages/7.jpg" class="responsive-img" alt="Mybatis（五）">
+                        <img src="/medias/loading.gif" data-original="/medias/featureimages/4.jpg" class="responsive-img" alt="锁和InnoDB引擎（六）">
                         
-                        <span class="card-title">Mybatis（五）</span>
+                        <span class="card-title">锁和InnoDB引擎（六）</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            Mybatis
+                            锁和InnoDB引擎
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2023-05-11
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-08-19
                             </span>
                         <span class="publish-author">
                             
@@ -957,12 +932,8 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/JavaWeb/">
-                        <span class="chip bg-color">JavaWeb</span>
-                    </a>
-                    
-                    <a href="/tags/Mybatis/">
-                        <span class="chip bg-color">Mybatis</span>
+                    <a href="/tags/MySQL/">
+                        <span class="chip bg-color">MySQL</span>
                     </a>
                     
                 </div>
