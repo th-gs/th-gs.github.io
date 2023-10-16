@@ -414,10 +414,6 @@
                                 <span class="chip bg-color">JavaWeb</span>
                             </a>
                         
-                            <a href="/tags/SpringBoot/">
-                                <span class="chip bg-color">SpringBoot</span>
-                            </a>
-                        
                     </div>
                     
                 </div>
@@ -426,8 +422,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/notes/" class="post-category">
-                                notes
+                            <a href="/categories/SpringBoot/" class="post-category">
+                                SpringBoot
                             </a>
                         
                     </div>
@@ -448,7 +444,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    1.1k
+                    1.6k
                 </div>
                 
 
@@ -470,7 +466,41 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="SpringBoot（八）"><a href="#SpringBoot（八）" class="headerlink" title="SpringBoot（八）"></a>SpringBoot（八）</h1><h2 id="配置优先级"><a href="#配置优先级" class="headerlink" title="配置优先级"></a>配置优先级</h2><p><strong>从高到低</strong>：</p>
+                <h1 id="SpringBoot（八）"><a href="#SpringBoot（八）" class="headerlink" title="SpringBoot（八）"></a>SpringBoot（八）</h1><p>SpringBoot是由Pivotal团队提供的全新框架，其设计目的是用来简化Spring应用的初始搭建以及开发过程。  </p>
+<p>Spring程序缺点：</p>
+<ul>
+<li>依赖设置繁琐</li>
+<li>配置繁琐</li>
+</ul>
+<p>SpringBoot程序优点</p>
+<ul>
+<li>起步依赖（简化依赖配置）</li>
+<li>自动配置（简化常用工程相关配置）</li>
+<li>辅助功能（内置服务器，…）</li>
+</ul>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><h3 id="parent"><a href="#parent" class="headerlink" title="parent"></a>parent</h3><p>开发springboot程序要继承spring-boot-starter-parent  </p>
+<p>spring-boot-starter-parent中定义若干个依赖管理  </p>
+<p>继承parent模块可避免多个依赖使用相同技术时出现依赖版本冲突  </p>
+<p>继承parent的形式可采用引入依赖的形式实现效果</p>
+<h3 id="starter"><a href="#starter" class="headerlink" title="starter"></a>starter</h3><p>开发springboot程序需要导入坐标时通常导入对应的starter  </p>
+<p>每个不同的starter根据功能不同，通常包含多个依赖坐标  </p>
+<p>使用starter可实现快速配置的效果，达到简化配置的目的</p>
+<h3 id="引导类"><a href="#引导类" class="headerlink" title="引导类"></a>引导类</h3><p>springboot工程提供引导类来启动程序  </p>
+<p>springboot工程启动后创建并初始化spring容器  </p>
+<p><strong>启动方式</strong>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@SpringBootApplication</span><br><span class="line">public class Application &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        SpringApplication.run(Application.class, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>springboot的引导类是boot工程的入口，运行main方法就可以启动项目。  </p>
+<p>springboot工程运行后初始化spring容器，扫描引导类所在包加载bean</p>
+<h3 id="内嵌tomcat"><a href="#内嵌tomcat" class="headerlink" title="内嵌tomcat"></a>内嵌tomcat</h3><p>内嵌tomcat服务器是springboot辅助功能之一。  </p>
+<p>内嵌tomcat工作原理是将tomcat服务器作为对象运行，并将该对象交给spring容器管理。  </p>
+<p>变更内嵌服务器思想是取出现有服务器，添加全新的服务器。  </p>
+<p><strong>内置服务器</strong>：</p>
+<ul>
+<li>tomcat（默认）：Apache出品，应用面广，浮在若干较重的组件</li>
+<li>jetty：更轻量级，负载性能远不及tomcat</li>
+<li>undertow：undertow，负载性能勉强跑赢tomcat</li>
+</ul>
+<h2 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h2><p>springboot中导入对应的stater（spring-boot-starter-web包含spring-boot-starter）后，提供对应配置属性。<br><strong>配置优先级从高到低</strong>：</p>
 <ol>
 <li>命令行参数<ul>
 <li>–server.port=8085</li>
@@ -481,9 +511,16 @@
 </ul>
 </li>
 <li>application.properties</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">server.port&#x3D;8080</span><br></pre></td></tr></table></figure>
+<ol start="4">
 <li>application.yml(推荐使用)</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">server:</span><br><span class="line">  port: 8081</span><br></pre></td></tr></table></figure>
+<ol start="5">
 <li>application.yaml</li>
 </ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">server:</span><br><span class="line">  port: 8082</span><br></pre></td></tr></table></figure>
 <p>打包后可在cmd中执行java指令，运行jar包:  </p>
 <p>java –Dserver.port=8084 -jar 名字.jar –server.port=8085  </p>
 <p><strong>注意事项</strong>：SpringBoot项目进行打包时，需引入插件spring-boot-maven-plugin（基于官网骨架创建项目，会自动添加该插件）</p>
@@ -557,7 +594,7 @@
 <li>@ConditionalOnMissingBean：判断环境中没有对应的bean（类型或名称），才注册bean到IOC容器</li>
 <li>@ConditionalOnProperty：判断配置文件中有对应属性和值，才注册bean到IOC容器</li>
 </ol>
-<h2 id="更新中…"><a href="#更新中…" class="headerlink" title="更新中…"></a>更新中…</h2>
+
                 
             </div>
             <hr/>
@@ -623,10 +660,6 @@
                             
                                 <a href="/tags/JavaWeb/">
                                     <span class="chip bg-color">JavaWeb</span>
-                                </a>
-                            
-                                <a href="/tags/SpringBoot/">
-                                    <span class="chip bg-color">SpringBoot</span>
                                 </a>
                             
                         </div>
@@ -1097,7 +1130,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">167.6k</span>&nbsp;字
+                class="white-color">161.1k</span>&nbsp;字
             
             
             

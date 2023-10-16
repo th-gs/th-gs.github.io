@@ -444,7 +444,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    1.9k
+                    2.3k
                 </div>
                 
 
@@ -466,8 +466,8 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="JAVA概述（一）"><a href="#JAVA概述（一）" class="headerlink" title="JAVA概述（一）"></a>JAVA概述（一）</h1><h2 id="输出hello-world"><a href="#输出hello-world" class="headerlink" title="输出hello world"></a>输出hello world</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public class HelloWorld&#123;</span><br><span class="line">    public static void main(String[] args)&#123;</span><br><span class="line">        System.out.println(&quot;hello world&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><strong>public</strong>：关键字，公共访问权限<br><strong>class</strong>：关键字，声明一个类<br><strong>HelloWorld</strong>:类名，与文件名一致<br>{} ：作用域，当前类的代码范围<br><strong>static</strong>：关键字，静态的<br><strong>void</strong>:关键字，返回结果为空<br><strong>main</strong>：方法名字，java程序入口方法<br>(String[] args):参数列表，表形参<br>System.out.println(“hello world”)：  </p>
+                <h1 id="JAVA概述（一）"><a href="#JAVA概述（一）" class="headerlink" title="JAVA概述（一）"></a>JAVA概述（一）</h1><h2 id="入门程序"><a href="#入门程序" class="headerlink" title="入门程序"></a>入门程序</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;输出hello world</span><br><span class="line">public class HelloWorld&#123;</span><br><span class="line">    public static void main(String[] args)&#123;</span><br><span class="line">        System.out.println(&quot;hello world&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;*输出结果</span><br><span class="line">hello world</span><br><span class="line">*&#x2F;</span><br></pre></td></tr></table></figure>
+<p><strong>public</strong>：关键字，公共访问权限<br><strong>class</strong>：关键字，声明一个类<br><strong>HelloWorld</strong>:类名，与文件名一致<br>{} ：作用域，当前类的代码范围<br><strong>static</strong>：关键字，静态的<br><strong>void</strong>：关键字，返回结果为空<br><strong>main</strong>：方法名字，java程序入口方法<br>(String[] args):参数列表，表形参<br>System.out.println(“hello world”)：  </p>
 <p>System.out.println()是将传递参数打印到控制台，并换行，这里参数为”hello world”   </p>
 <p>System是<strong>final类</strong>，out是System的<strong>静态成员变量（静态成员字段）</strong>，类型为PrintStream，println是PrintStream类的一个方法，表示输出括号里的内容</p>
 <h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><p>若类是用public修饰，类名需与文件名一致；不是public修饰，可不一致。<br>一个java文件中可有多个类，但至多一个public类。</p>
@@ -486,8 +486,27 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public class Test&#123;</span><br><span class="line">    &#x2F;&#x2F;成员变量</span><br><span class="line">    int a&#x3D;10;</span><br><span class="line">    public static void main(String[] args)</span><br><span class="line">    &#123;</span><br><span class="line">        &#x2F;&#x2F;局部变量</span><br><span class="line">        String blog&#x3D;&quot;ljsblog&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><strong>区别</strong>：</p>
 <ol>
-<li>定义的位置的不同，因此作用域不同</li>
+<li>定义位置不同<ul>
+<li>局部变量：在方法内部</li>
+<li>成员变量：在方法的外部，类的内部</li>
+</ul>
+</li>
+<li>作用范围不同<ul>
+<li>局部变量：只在方法中可用</li>
+<li>成员变量：整个类中都可用</li>
+</ul>
+</li>
 <li>成员变量有初始值，局部变量没有</li>
+<li>内存位置不同<ul>
+<li>局部变量：位于栈内存</li>
+<li>成员变量：位于堆内存</li>
+</ul>
+</li>
+<li>生命周期不同<ul>
+<li>局部变量：随着方法进栈而诞生，出栈而消亡</li>
+<li>成员变量：随着对象创建而诞生，GC（垃圾收集）回收而消亡</li>
+</ul>
+</li>
 <li>成员变量有访问权限修饰符，局部变量没有，局部变量的权限即所在方法的权限</li>
 </ol>
 <h2 id="常量"><a href="#常量" class="headerlink" title="常量"></a>常量</h2><p><strong>常量</strong>不可以改变的量。</p>
@@ -495,8 +514,8 @@
 <h2 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h2><ul>
 <li>基本数据类型<ul>
 <li>整数：byte(占用1个字节) short(2) int(4) long(8)</li>
-<li>小数: float(4) double(8)</li>
-<li>布尔: boolean(1)</li>
+<li>小数：float(4) double(8)</li>
+<li>布尔：boolean(1)</li>
 <li>字符：char(2)</li>
 </ul>
 </li>
@@ -524,15 +543,34 @@
 <ol>
 <li>导入import java.util.Scanner</li>
 <li>声明Scanner类型的变量</li>
-<li>使用Scanner类中对应的方法：<ul>
-<li>.nextInt()  获得整数</li>
-<li>.nextDouble()   //获得小数</li>
-<li>.next()   //获得字符串</li>
-<li>.next().charAt(0) //获得单个字符</li>
+<li>使用Scanner类中常用的方法：<ul>
+<li>nextInt()  获得整数</li>
+<li>nextDouble()   获得小数</li>
+<li>next()   获得字符串，遇到空格，Enter，Tab等就会结束输入</li>
+<li>next().charAt(0) 获得单个字符</li>
+<li>nextLine()：获取一行字符串，遇到Enter键才会结束输入</li>
+<li>nextBoolean()：获取一个布尔值（true或false）</li>
 </ul>
 </li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">import java.util.Scanner;</span><br><span class="line">public class HelloWorld&#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        &#x2F;&#x2F;输入整型</span><br><span class="line">&#x2F;&#x2F;        Scanner scanner1&#x3D;new Scanner(System.in);</span><br><span class="line">&#x2F;&#x2F;        System.out.print(&quot;请输入整数:&quot;);</span><br><span class="line">&#x2F;&#x2F;        int a&#x3D;scanner1.nextInt();</span><br><span class="line">&#x2F;&#x2F;        System.out.println(&quot;整数为&quot;+a);</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F;输入小数</span><br><span class="line">&#x2F;&#x2F;        Scanner scanner2&#x3D;new Scanner(System.in);</span><br><span class="line">&#x2F;&#x2F;        System.out.print(&quot;请输入小数：&quot;);</span><br><span class="line">&#x2F;&#x2F;        double d&#x3D;scanner2.nextDouble();</span><br><span class="line">&#x2F;&#x2F;        System.out.println(&quot;小数为&quot;+d);</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F;输入字符串</span><br><span class="line">&#x2F;&#x2F;        Scanner scanner3&#x3D;new Scanner(System.in);</span><br><span class="line">&#x2F;&#x2F;        System.out.print(&quot;请输入字符串:&quot;);</span><br><span class="line">&#x2F;&#x2F;        String s&#x3D;scanner3.next();</span><br><span class="line">&#x2F;&#x2F;        System.out.println(&quot;字符串为&quot;+s);</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F;输入字符</span><br><span class="line">        Scanner scanner4 &#x3D; new Scanner(System.in);</span><br><span class="line">        System.out.print(&quot;请输入字符：&quot;);</span><br><span class="line">        char c &#x3D; scanner4.next().charAt(0);</span><br><span class="line">        System.out.println(&quot;字符为&quot; + c);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>next()和nextLine()的区别</strong>：  </p>
+<ul>
+<li><p>next()</p>
+<ul>
+<li>读取的字符串不包含分隔符，若输入存在多个以空格分隔的字符串，next()方法只会返回第一个字符串</li>
+<li>读取前会忽略输入中的前置空格</li>
+</ul>
+</li>
+<li><p>nextLine()</p>
+<ul>
+<li>从输入源读取并返回一行字符串，包括换行符（\n）在内</li>
+<li>会读取输入源中全部的内容直至遇到换行符，或是输入结束</li>
+<li>nextLine()方法返回的字符串包含空格和其他特殊字符</li>
+</ul>
+</li>
+</ul>
+<p><strong>范例</strong>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">import java.util.Scanner;</span><br><span class="line"></span><br><span class="line">public class Test &#123;</span><br><span class="line">    public static void main(String[] args)&#123;</span><br><span class="line">        Scanner scanner&#x3D;new Scanner(System.in);</span><br><span class="line"></span><br><span class="line">        System.out.print(&quot;请输入整数：&quot;);</span><br><span class="line">        int i &#x3D; scanner.nextInt();</span><br><span class="line">        System.out.println(&quot;整数为&quot;+i);</span><br><span class="line"></span><br><span class="line">        System.out.print(&quot;请输入小数：&quot;);</span><br><span class="line">        double d &#x3D; scanner.nextDouble();</span><br><span class="line">        System.out.println(&quot;小数为&quot;+d);</span><br><span class="line"></span><br><span class="line">        System.out.print(&quot;请输入字符串：&quot;);</span><br><span class="line">        String str &#x3D; scanner.next();</span><br><span class="line">        System.out.println(&quot;字符串为&quot;+str);</span><br><span class="line"></span><br><span class="line">        String st&#x3D;scanner.nextLine();</span><br><span class="line"></span><br><span class="line">        System.out.print(&quot;请输入一行字符串：&quot;);</span><br><span class="line">        String s &#x3D; scanner.nextLine();</span><br><span class="line">        System.out.println(&quot;该行字符串为&quot;+s);</span><br><span class="line"></span><br><span class="line">        System.out.print(&quot;请输入单个字符：&quot;);</span><br><span class="line">        char c &#x3D; scanner.next().charAt(0);</span><br><span class="line">        System.out.println(&quot;字符为&quot;+c);</span><br><span class="line"></span><br><span class="line">        System.out.print(&quot;请输入布尔值：&quot;);</span><br><span class="line">        boolean b &#x3D; scanner.nextBoolean();</span><br><span class="line">        System.out.println(&quot;布尔值为&quot;+b);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;*控制台输出</span><br><span class="line">请输入整数：99</span><br><span class="line">整数为99</span><br><span class="line">请输入小数：9.9</span><br><span class="line">小数为9.9</span><br><span class="line">请输入字符串：str</span><br><span class="line">字符串为str</span><br><span class="line">请输入一行字符串：sd fasf</span><br><span class="line">该行字符串为sd fasf</span><br><span class="line">请输入单个字符：a</span><br><span class="line">字符为a</span><br><span class="line">请输入布尔值：true</span><br><span class="line">布尔值为true</span><br><span class="line"></span><br><span class="line">*&#x2F;</span><br></pre></td></tr></table></figure>
                 
             </div>
             <hr/>
@@ -1068,7 +1106,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">167.6k</span>&nbsp;字
+                class="white-color">161.1k</span>&nbsp;字
             
             
             

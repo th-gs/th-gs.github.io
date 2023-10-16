@@ -473,7 +473,7 @@
 <li><strong>注</strong>：当使用双引号直接赋值时，系统会检查该字符串在串池中是否存在，不存在则创建新的，存在则复用。</li>
 </ul>
 </li>
-<li>new。构造方法：<ul>
+<li>new构造方法：<ul>
 <li>public String()                   创建空白字符串</li>
 <li>public String(String original)    根据传入的字符串，创建字符串对象</li>
 <li>public String(char[] chs)         根据字符数组，创建字符串对象</li>
@@ -555,7 +555,7 @@
 <h2 id="字符串底层原理"><a href="#字符串底层原理" class="headerlink" title="字符串底层原理"></a>字符串底层原理</h2><h3 id="字符串拼接"><a href="#字符串拼接" class="headerlink" title="字符串拼接"></a>字符串拼接</h3><ul>
 <li>字符串拼接时，若有变量:<ul>
 <li>JDK8前：系统底层会自动创建一个StringBuilder对象，再调用append方法完成拼接，拼接后，再调用toString方法转换成String类型，而toString方法的底层原理是直接new了一个字符串对象</li>
-<li>JDK8:系统预估字符串拼接后的大小，把拼接的内容放在数组中，此时也产生一个新的字符串</li>
+<li>JDK8：系统预估字符串拼接后的大小，把拼接的内容放在数组中，此时也产生一个新的字符串</li>
 </ul>
 </li>
 <li>若无变量：<ul>
@@ -1106,7 +1106,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">167.6k</span>&nbsp;字
+                class="white-color">161.1k</span>&nbsp;字
             
             
             
