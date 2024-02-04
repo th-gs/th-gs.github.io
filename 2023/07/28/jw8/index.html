@@ -474,9 +474,14 @@
 </ul>
 <p>SpringBoot程序优点</p>
 <ul>
-<li>起步依赖（简化依赖配置）</li>
-<li>自动配置（简化常用工程相关配置）</li>
-<li>辅助功能（内置服务器，…）</li>
+<li>起步依赖（简化依赖配置）：本质上就是一个maven坐标，整合了完成一个功能需要的所有坐标</li>
+<li>自动配置（简化常用工程相关配置）：在boot程序启动后。一些bean对象会自动注入到ioc容器，不需手动声明。</li>
+<li>其他特性<ul>
+<li>内嵌的Tomcat，Jetty，无需部署war文件</li>
+<li>外部化配合</li>
+<li>不需xml配置（properties/yml）</li>
+</ul>
+</li>
 </ul>
 <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><h3 id="parent"><a href="#parent" class="headerlink" title="parent"></a>parent</h3><p>开发springboot程序要继承spring-boot-starter-parent  </p>
 <p>spring-boot-starter-parent中定义若干个依赖管理  </p>
@@ -560,7 +565,7 @@
 <h2 id="第三方bean"><a href="#第三方bean" class="headerlink" title="第三方bean"></a>第三方bean</h2><p>若要管理bean对象来自第三方（非自定义），是无法用@Component及衍生注解声明bean的，需用到@Bean。  </p>
 <p>若要管理第三方的bean对象，建议对这些bean进行集中分类配置，可通过@Configuration注解声明一个配置类。  </p>
 <p>通过@Bean注解的name或value属性可以声明bean的名称，若不指定，默认bean的名称就是方法名。  </p>
-<p>若第三方bean需依赖其他bean对象，直接在bean定义方法中设置形参即可吗，容器会根据类型自动装配。  </p>
+<p>若第三方bean需依赖其他bean对象，直接在bean定义方法中设置形参即可，容器会根据类型自动装配。  </p>
 <p><strong>@Component及衍生注解与@Bean注解使用场景</strong>：</p>
 <ul>
 <li>项目中自定义的，使用@Component及其衍生注解</li>
@@ -1121,7 +1126,7 @@
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             
-                <span id="year">2021-2023</span>
+                <span id="year">2021-2024</span>
             
             <span id="year">2021</span>
             <a href="/about" target="_blank">ljs</a>
@@ -1130,7 +1135,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">161.1k</span>&nbsp;字
+                class="white-color">133.8k</span>&nbsp;字
             
             
             

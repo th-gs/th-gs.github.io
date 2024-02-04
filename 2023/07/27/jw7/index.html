@@ -488,7 +488,7 @@
 <li>编写AOP程序：针对特定方法根据业务需要进行编程</li>
 </ol>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">import lombok.extern.slf4j.Slf4j;</span><br><span class="line">import org.aspectj.lang.ProceedingJoinPoint;</span><br><span class="line">import org.aspectj.lang.annotation.Around;</span><br><span class="line">import org.aspectj.lang.annotation.Aspect;</span><br><span class="line">import org.springframework.stereotype.Component;</span><br><span class="line"></span><br><span class="line">@Slf4j</span><br><span class="line">@Component</span><br><span class="line">@Aspect &#x2F;&#x2F;AOP类</span><br><span class="line">public class TimeAspect &#123;</span><br><span class="line">    @Around(&quot;execution(* com.itheima.service.impl.DeptServiceImpl.*(..))&quot;) &#x2F;&#x2F;切入点表达式</span><br><span class="line">    public Object recordTime(ProceedingJoinPoint joinPoint) throws Throwable &#123;</span><br><span class="line">        &#x2F;&#x2F;1. 记录开始时间</span><br><span class="line">        long begin &#x3D; System.currentTimeMillis();</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F;2. 调用原始方法运行</span><br><span class="line">        Object result &#x3D; joinPoint.proceed();</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F;3. 记录结束时间, 计算方法执行耗时</span><br><span class="line">        long end &#x3D; System.currentTimeMillis();</span><br><span class="line">        log.info(joinPoint.getSignature()+&quot;方法执行耗时: &#123;&#125;ms&quot;, end-begin);</span><br><span class="line">        return result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="核心概念"><a href="#核心概念" class="headerlink" title="核心概念"></a>核心概念</h3><p><strong>连接点</strong>：JointPoint，可以被AOP控制的方法（暗含方法执行时的相关信息@）  </p>
+<h3 id="核心概念"><a href="#核心概念" class="headerlink" title="核心概念"></a>核心概念</h3><p><strong>连接点</strong>：JointPoint，可以被AOP控制的方法（暗含方法执行时的相关信息）  </p>
 <p><strong>通知</strong>：Advice，指那些重复的逻辑，也就是共性功能（最终体现为一个方法）  </p>
 <p><strong>切入点</strong>：PointCut，匹配连接点的条件，通知仅会在切入点方法执行时被应用  </p>
 <p><strong>切面</strong>：Apect，描述通知与切入点的对应关系（通知+切入点）  </p>
@@ -1082,7 +1082,7 @@
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             
-                <span id="year">2021-2023</span>
+                <span id="year">2021-2024</span>
             
             <span id="year">2021</span>
             <a href="/about" target="_blank">ljs</a>
@@ -1091,7 +1091,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">161.1k</span>&nbsp;字
+                class="white-color">133.8k</span>&nbsp;字
             
             
             
